@@ -1,0 +1,10 @@
+{
+  "name": "${ant.project.name}",
+  "mcversion": "${litemodversion}",
+  "revision": "${build.number}",
+  "author": "${author}",
+  "description": "simple hello world, so yh... Hello World!",
+  "classTransformerClasses" : [
+    "com.fallingdutchman.DurabilityViewer.DurabilityViewerTransformer"
+    ]
+}
