@@ -62,27 +62,19 @@ public class LiteModDurabilityViewer implements Tickable
                 String var7 = arg6 == null ? String.valueOf(arg3.stackSize) : arg6;
                 GL11.glDisable(GL11.GL_LIGHTING);
                 GL11.glDisable(GL11.GL_DEPTH_TEST);
-                GL11.glDisable(GL11.GL_BLEND);
                 arg1.drawStringWithShadow(var7, arg4 + 19 - 2 - arg1.getStringWidth(var7), arg5 + 6 + 3, 16777215);
                 GL11.glEnable(GL11.GL_LIGHTING);
                 GL11.glEnable(GL11.GL_DEPTH_TEST);
             } else if (arg3.isItemDamaged())
             {
-                String ItemName = arg3.getDisplayName();
+                int Durability = arg3.getMaxDurability() - arg3.getCurrentDurability();
+                String ItemDurability = Integer.toString(Durability);
                 GL11.glDisable(GL11.GL_LIGHTING);
                 GL11.glDisable(GL11.GL_DEPTH_TEST);
-                GL11.glDisable(GL11.GL_TEXTURE_2D);
-                GL11.glDisable(GL11.GL_ALPHA_TEST);
-                GL11.glDisable(GL11.GL_BLEND);
-                arg1.drawString(ItemName, arg4 + 19-2 -arg1.getStringWidth(ItemName), arg5 + 6+3,255);
-                GL11.glEnable(GL11.GL_ALPHA_TEST);
-                GL11.glEnable(GL11.GL_TEXTURE_2D);
+                arg1.drawString(ItemDurability, arg4 + 19 - 2 - arg1.getStringWidth(ItemDurability), arg5 + 6 + 3, 16777215);
                 GL11.glEnable(GL11.GL_LIGHTING);
                 GL11.glEnable(GL11.GL_DEPTH_TEST);
-                GL11.glEnable(GL11.GL_BLEND);
             }
         }
-
     }
-
 }
