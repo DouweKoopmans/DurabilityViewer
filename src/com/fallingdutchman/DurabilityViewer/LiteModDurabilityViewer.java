@@ -48,8 +48,8 @@ public class LiteModDurabilityViewer implements Tickable
      * @param arg1 Reference to the FontRenderer Class
      * @param arg2 Reference to the textturemanger class
      * @param arg3 Reference to the ItemStack
-     * @param arg4
-     * @param arg5
+     * @param arg4 x
+     * @param arg5 y
      * @param arg6
      */
     public static void OnRenderItemOverlay(EventInfo<RenderItem> e, FontRenderer arg1, TextureManager arg2, ItemStack arg3, int arg4, int arg5, String arg6)
@@ -67,11 +67,14 @@ public class LiteModDurabilityViewer implements Tickable
                 GL11.glEnable(GL11.GL_DEPTH_TEST);
             } else if (arg3.isItemDamaged())
             {
-                int Durability = arg3.getMaxDurability() - arg3.getCurrentDurability();
+                int Durability = arg3.getMaxDurability() - arg3.getCurrentDurability() + 1;
                 String ItemDurability = Integer.toString(Durability);
+                int Stringwidth = arg1.getStringWidth(ItemDurability);
                 GL11.glDisable(GL11.GL_LIGHTING);
                 GL11.glDisable(GL11.GL_DEPTH_TEST);
-                arg1.drawString(ItemDurability, arg4 + 19 - 2 - arg1.getStringWidth(ItemDurability), arg5 + 6 + 3, 16777215);
+                GL11.glScalef(0.5F,0.5F,0.5F);
+                arg1.drawStringWithShadow(ItemDurability, (arg4 + 8) * 2 + 1 + Stringwidth / 2 - Stringwidth, (arg5 + 11) * 2 , 16777215);
+                GL11.glScalef(2F,2F,2F);
                 GL11.glEnable(GL11.GL_LIGHTING);
                 GL11.glEnable(GL11.GL_DEPTH_TEST);
             }
