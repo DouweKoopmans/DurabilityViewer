@@ -1,4 +1,4 @@
-    package com.fallingdutchman.DurabilityViewer;
+package com.fallingdutchman.DurabilityViewer;
 
 import com.mumfrey.liteloader.core.runtime.Obf;
 
