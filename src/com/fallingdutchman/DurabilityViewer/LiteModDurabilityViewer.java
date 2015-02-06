@@ -53,9 +53,9 @@ public class LiteModDurabilityViewer implements HUDRenderListener, Configurable
     public static void OnRenderItemOverlay(EventInfo<RenderItem> e, FontRenderer arg1, TextureManager arg2, ItemStack arg3, int arg4, int arg5, String arg6)
     {
         e.cancel();
-/*        if (arg3 != null)
+        if (arg3 != null)
         {
-            if (arg3.stackSize > 1 || arg6 != null) //TODO: get rid of this if so i only have the else if left. requires changing the injection point of the event.
+            if (arg3.stackSize > 1 || arg6 != null)
             {
                 String var7 = arg6 == null ? String.valueOf(arg3.stackSize) : arg6;
                 GL11.glDisable(GL11.GL_LIGHTING);
@@ -71,7 +71,6 @@ public class LiteModDurabilityViewer implements HUDRenderListener, Configurable
                 BarRenderer.Render(arg3, arg4, arg5);
             }
         }
-*/
     }
     //Not used (yet)
 

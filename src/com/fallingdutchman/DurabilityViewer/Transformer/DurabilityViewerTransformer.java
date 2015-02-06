@@ -24,8 +24,7 @@ public class DurabilityViewerTransformer extends EventInjectionTransformer
                 Integer.TYPE,
                 Integer.TYPE,
                 String.class);
-        //MethodHead InjectPoint = new MethodHead(); //TODO: replace with JumpInsnPoint
-        JumpInsnPoint InjectPoint = new JumpInsnPoint();
+        MethodHead InjectPoint = new MethodHead(); //TODO: replace with JumpInsnPoint
 
         this.addEvent(onRenderItemOverlay,modRenderItemOverlay,InjectPoint).addListener(new MethodInfo("com.fallingdutchman.DurabilityViewer.LiteModDurabilityViewer", "OnRenderItemOverlay"));
     }
