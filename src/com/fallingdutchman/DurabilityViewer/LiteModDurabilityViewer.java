@@ -1,46 +1,47 @@
 package com.fallingdutchman.DurabilityViewer;
 
-import com.mumfrey.liteloader.Tickable;
+import com.fallingdutchman.DurabilityViewer.Gui.DurabilityViewerConfigPanel;
+import com.fallingdutchman.DurabilityViewer.Renderer.BarRenderer;
+import com.fallingdutchman.DurabilityViewer.Renderer.StringRenderer;
+
+import com.mumfrey.liteloader.Configurable;
+import com.mumfrey.liteloader.HUDRenderListener;
+import com.mumfrey.liteloader.modconfig.ConfigPanel;
 import com.mumfrey.liteloader.transformers.event.EventInfo;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.item.ItemStack;
 
-import java.io.File;
-
 import org.lwjgl.opengl.GL11;
 
-public class LiteModDurabilityViewer implements Tickable
+import java.io.File;
+
+public class LiteModDurabilityViewer implements HUDRenderListener, Configurable
 {
-    @Override
-    public void onTick(Minecraft minecraft, float partialTicks, boolean inGame, boolean clock)
-    {}
+    private static DurabilityViewerConfig config = new DurabilityViewerConfig();
 
     @Override
     public String getName()
     {
-        return "Hello World Mod";
+        return "Durability Viewer";
     }
 
     @Override
     public String getVersion()
     {
-        return "6.9";
+        return "0.5";
     }
 
     @Override
-    public void init(File configPath)
-    {}
-
-    @Override
-    public void upgradeSettings(String version, File configPath, File oldConfigPath)
-    {}
+    public Class<? extends ConfigPanel> getConfigPanelClass()
+    {
+        return DurabilityViewerConfigPanel.class;
+    }
 
     /**
-     * called by the EventInjectionTransformer {@link DurabilityViewerTransformer}
+     * called by the EventInjectionTransformer {@link com.fallingdutchman.DurabilityViewer.Transformer.DurabilityViewerTransformer}
      * @param e EventInfo
      * @param arg1 Reference to the FontRenderer Class
      * @param arg2 Reference to the textturemanger class
@@ -52,7 +53,7 @@ public class LiteModDurabilityViewer implements Tickable
     public static void OnRenderItemOverlay(EventInfo<RenderItem> e, FontRenderer arg1, TextureManager arg2, ItemStack arg3, int arg4, int arg5, String arg6)
     {
         e.cancel();
-        if (arg3 != null)
+/*        if (arg3 != null)
         {
             if (arg3.stackSize > 1 || arg6 != null) //TODO: get rid of this if so i only have the else if left. requires changing the injection point of the event.
             {
@@ -64,54 +65,29 @@ public class LiteModDurabilityViewer implements Tickable
                 GL11.glEnable(GL11.GL_DEPTH_TEST);
             } else if (arg3.isItemDamaged())
             {
-                int Durability = arg3.getMaxDurability() - arg3.getCurrentDurability() + 1;
-                String ItemDurability = Integer.toString(Durability);
-                int Stringwidth = arg1.getStringWidth(ItemDurability);
-                GL11.glDisable(GL11.GL_LIGHTING);
-                GL11.glDisable(GL11.GL_DEPTH_TEST);
-                GL11.glScalef(0.5F,0.5F,0.5F);
-                arg1.drawStringWithShadow(ItemDurability, (arg4 + 8) * 2 + 1 + Stringwidth / 2 - Stringwidth, (arg5 + 11) * 2, Colour(arg3));
-                GL11.glScalef(2F,2F,2F);
-                GL11.glEnable(GL11.GL_LIGHTING);
-                GL11.glEnable(GL11.GL_DEPTH_TEST);
+                //draw string
+                StringRenderer.Render(arg1, arg3, arg4, arg5);
+                //draw bar
+                BarRenderer.Render(arg3, arg4, arg5);
             }
         }
+*/
     }
-    //TODO: figure out what the heck i am doing here.
-    private static int Colour(ItemStack item)
-    {
-        int currentDura = item.getMaxDurability() - item.getCurrentDurability() + 1;
-        float var1 = ((float) currentDura -1.0F) / (float)item.getMaxDurability();
-        int g = (int)(var1 * 255.0F);
-        int r = (int)((1.0F - var1) * 255.0F);
+    //Not used (yet)
 
-        return Integer.parseInt(toHex(Math.min(r + 100 ,255), Math.min(g + 100,255), 100), 16);
-    }
+    @Override
+    public void onPreRenderHUD(int screenWidth, int screenHeight)
+    {}
 
-    public static String toHex(int r, int g, int b)
-    {
-        return toBrowserHexValue(r) + toBrowserHexValue(g) + toBrowserHexValue(b);
-    }
+    @Override
+    public void onPostRenderHUD(int screenWidth, int screenHeight)
+    {}
 
-    private static String toBrowserHexValue(int number)
-    {
-        String hexString = Integer.toHexString(number & 255);
-        StringBuilder builder = new StringBuilder();
+    @Override
+    public void init(File configPath)
+    {}
 
-        if (hexString.length() == 1)
-        {
-            builder.append("0");
-            builder.append(hexString);
-        }
-        else if (hexString.length() == 2)
-        {
-            builder.append(hexString);
-        }
-        else if (hexString.length() == 0)
-        {
-            builder.append("00");
-        }
-
-        return builder.toString().toUpperCase();
-    }
+    @Override
+    public void upgradeSettings(String version, File configPath, File oldConfigPath)
+    {}
 }
