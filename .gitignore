@@ -1,6 +1,3 @@
-debug
-buildnumber.txt
-
 ## eclipse
 /eclipse
 /.settings
@@ -12,7 +9,19 @@ buildnumber.txt
 ## intellij
 /out
 /.idea
-/*.iml
-/*.ipr
+DurabilityViewerMod.iml
+*.ipr
 /*.iws
 /atlassian-ide-plugin.xml
+
+## Gradle
+build
+.gradle
+gradle
+gradle.properties
+gradlew
+gradlew.bat
+
+## Ant
+ant
+debug

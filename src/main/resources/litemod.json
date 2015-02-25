@@ -1,0 +1,11 @@
+{
+  "name": "DurabilityViewer",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "revision": "${revision}",
+  "author": "FallingDutchman",
+  "description": "simple hello world, so yh... Hello World!",
+  "classTransformerClasses" : [
+    "com.fallingdutchman.DurabilityViewer.Transformer.DurabilityViewerTransformer"
+    ]
+}

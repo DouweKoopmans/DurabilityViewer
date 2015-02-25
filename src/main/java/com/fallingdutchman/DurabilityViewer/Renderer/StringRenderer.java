@@ -1,5 +1,6 @@
 package com.fallingdutchman.DurabilityViewer.Renderer;
 
+import com.fallingdutchman.DurabilityViewer.LiteModDurabilityViewer;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
@@ -8,7 +9,7 @@ public class StringRenderer
 {
     public static void Render(FontRenderer Fr, ItemStack Item, int x, int y)
     {
-        int Durability = Item.getMaxDurability() - Item.getCurrentDurability() + 1;
+        int Durability = Item.getMaxDamage() - Item.getItemDamage() + 1;
         String ItemDurability = Integer.toString(Durability);
         int Stringwidth = Fr.getStringWidth(ItemDurability);
 
@@ -24,15 +25,36 @@ public class StringRenderer
     //TODO: figure out what the heck i am doing here.
     private static int Colour(ItemStack item)
     {
-        int currentDura = item.getMaxDurability() - item.getCurrentDurability() + 1;
-        float var1 = ((float) currentDura -1.0F) / (float)item.getMaxDurability();
-        int g = (int)(var1 * 255.0F);
-        int r = (int)((1.0F - var1) * 255.0F);
+        if (!LiteModDurabilityViewer.instance.StaticColour)
+        {
+            int currentDura = item.getMaxDamage() - item.getItemDamage() + 1;
+            float var1 = ((float) currentDura - 1.0F) / (float) item.getMaxDamage();
+            int g = (int) (var1 * 255.0F);
+            int r = (int) ((1.0F - var1) * 255.0F);
 
-        return Integer.parseInt(toHex(Math.min(r + 100 ,255), Math.min(g + 100,255), 100), 16);
+            return Integer.parseInt(toHex(Math.min(r + 100, 255), Math.min(g + 100, 255), 100), 16);
+        }
+        return toDec(LiteModDurabilityViewer.instance.HexColour);
     }
 
-    public static String toHex(int r, int g, int b)
+    private static int toDec(String Hex)
+    {
+        int var1;
+//        if (Hex.contains("a") || Hex.contains("b") || Hex.contains("c") || Hex.contains("d") || Hex.contains("e") ||  Hex.contains("f"))
+//        {
+        if (Hex.equals(""))
+        {
+            return 16777215;
+        }
+        else
+        {
+            var1 = Integer.parseInt(Hex.trim(), 16);
+        }
+//        }
+        return var1;
+    }
+
+    private static String toHex(int r, int g, int b)
     {
         return toBrowserHexValue(r) + toBrowserHexValue(g) + toBrowserHexValue(b);
     }
