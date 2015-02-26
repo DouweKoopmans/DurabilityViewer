@@ -1,6 +1,5 @@
 package com.fallingdutchman.DurabilityViewer;
 
-import com.fallingdutchman.DurabilityViewer.Config.Configurations;
 import com.fallingdutchman.DurabilityViewer.Gui.DurabilityViewerConfigPanel;
 import com.fallingdutchman.DurabilityViewer.Renderer.BarRenderer;
 import com.fallingdutchman.DurabilityViewer.Renderer.StringRenderer;
@@ -9,16 +8,13 @@ import com.fallingdutchman.DurabilityViewer.References.references;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.mumfrey.liteloader.Configurable;
-import com.mumfrey.liteloader.InitCompleteListener;
 import com.mumfrey.liteloader.LiteMod;
 import com.mumfrey.liteloader.core.LiteLoader;
 import com.mumfrey.liteloader.modconfig.ConfigPanel;
 import com.mumfrey.liteloader.modconfig.ConfigStrategy;
-import com.mumfrey.liteloader.modconfig.Exposable;
 import com.mumfrey.liteloader.modconfig.ExposableOptions;
 import com.mumfrey.liteloader.transformers.event.EventInfo;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.texture.TextureManager;
@@ -27,8 +23,6 @@ import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
 
 @ExposableOptions(strategy = ConfigStrategy.Unversioned, filename = "DurabilityViewer.config.json")
 public class LiteModDurabilityViewer implements LiteMod, Configurable
@@ -141,8 +135,6 @@ public class LiteModDurabilityViewer implements LiteMod, Configurable
     {
         LiteLoader.getInstance().writeConfig(this);
     }
-
-    /**config stuff*/
 
     //Not used
     @Override

@@ -4,9 +4,7 @@ import com.mumfrey.liteloader.transformers.event.Event;
 import com.mumfrey.liteloader.transformers.event.EventInjectionTransformer;
 import com.mumfrey.liteloader.transformers.event.MethodInfo;
 
-import com.mumfrey.liteloader.transformers.event.inject.JumpInsnPoint;
 import com.mumfrey.liteloader.transformers.event.inject.MethodHead;
-import org.objectweb.asm.Opcodes;
 
 public class DurabilityViewerTransformer extends EventInjectionTransformer
 {

@@ -43,6 +43,9 @@ public class DurabilityViewerConfigPanel extends Gui implements ConfigPanel
         return SPACING * SubButtonList.size();
     }
 
+    //TODO: add option to change the DurMode -> look into drop down menus
+    //TODO: replace textfield with a colour panel (worldeditcui)
+    //TODO: add option to change DurSize -> look into drop down menus
     @Override
     public void onPanelShown(ConfigPanelHost host)
     {
@@ -100,16 +103,12 @@ public class DurabilityViewerConfigPanel extends Gui implements ConfigPanel
             activeButton = DurbarBox;
             LiteModDurabilityViewer.instance.RDurBar = !LiteModDurabilityViewer.instance.RDurBar;
             DurbarBox.checked = LiteModDurabilityViewer.instance.RDurBar;
-
-            //LiteLoaderLogger.info("drawing bar = " + LiteModDurabilityViewer.instance.RDurBar);
         }
         else if (DurStringBox.mousePressed(mc, mouseX,mouseY))
         {
             activeButton = DurStringBox;
             LiteModDurabilityViewer.instance.RDurString = !LiteModDurabilityViewer.instance.RDurString;
             DurStringBox.checked = LiteModDurabilityViewer.instance.RDurString;
-
-            //LiteLoaderLogger.info("drawing string = " + LiteModDurabilityViewer.instance.RDurString);
         }
         else if (StaticColourBox.mousePressed(mc,mouseX,mouseY))
         {

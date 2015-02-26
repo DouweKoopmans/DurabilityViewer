@@ -1,6 +1,7 @@
 package com.fallingdutchman.DurabilityViewer.Renderer;
 
 import com.fallingdutchman.DurabilityViewer.LiteModDurabilityViewer;
+import com.mumfrey.liteloader.util.log.LiteLoaderLogger;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
@@ -15,12 +16,41 @@ public class StringRenderer
 
         GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glDisable(GL11.GL_DEPTH_TEST);
-        GL11.glScalef(0.5F,0.5F,0.5F);
-        Fr.drawStringWithShadow(ItemDurability, (x + 8) * 2 + 1 + Stringwidth / 2 - Stringwidth, (y + 11) * 2, Colour(Item));
-        GL11.glScalef(2F,2F,2F);
+        GL11.glScalef(
+                (LiteModDurabilityViewer.instance.DurSize.equals("small") ? 0.5F : 1.0F ),
+                (LiteModDurabilityViewer.instance.DurSize.equals("small") ? 0.5F : 1.0F ),
+                (LiteModDurabilityViewer.instance.DurSize.equals("small") ? 0.5F : 1.0F ));
+        Fr.drawStringWithShadow(DurText(Item), (x + 8) * 2 + 1 + Stringwidth / 2 - Stringwidth, (y + 11) * 2, Colour(Item));
+        GL11.glScalef(
+                (LiteModDurabilityViewer.instance.DurSize.equals("small") ? 2.0F : 1.0F ),
+                (LiteModDurabilityViewer.instance.DurSize.equals("small") ? 2.0F : 1.0F ),
+                (LiteModDurabilityViewer.instance.DurSize.equals("small") ? 2.0F : 1.0F ));
         GL11.glEnable(GL11.GL_LIGHTING);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
     }
+
+    private static String DurText(ItemStack item)
+    {
+        String Text;
+        if (LiteModDurabilityViewer.instance.DurMode == 1)
+        {
+            Text = Integer.toString(item.getMaxDamage() - item.getItemDamage() + 1);
+        }else if (LiteModDurabilityViewer.instance.DurMode == 2)
+        {
+            Text = Integer.toString(item.getItemDamage() + 1 / item.getMaxDamage() * 100);
+        }else if (LiteModDurabilityViewer.instance.DurMode == 3)
+        {
+            Text = Integer.toString(item.getItemDamage() + 1) + "/" +  Integer.toString(item.getMaxDamage());
+        } else
+        {
+            LiteLoaderLogger.severe("durability settings broken, fixing this now, please go into settings and reselect the setting you want to use");
+            LiteModDurabilityViewer.instance.DurMode = 1;
+            Text = Integer.toString(item.getMaxDamage() - item.getItemDamage() + 1);
+        }
+
+        return Text;
+    }
+
 
     //TODO: figure out what the heck i am doing here.
     private static int Colour(ItemStack item)
@@ -40,8 +70,6 @@ public class StringRenderer
     private static int toDec(String Hex)
     {
         int var1;
-//        if (Hex.contains("a") || Hex.contains("b") || Hex.contains("c") || Hex.contains("d") || Hex.contains("e") ||  Hex.contains("f"))
-//        {
         if (Hex.equals(""))
         {
             return 16777215;
@@ -50,7 +78,6 @@ public class StringRenderer
         {
             var1 = Integer.parseInt(Hex.trim(), 16);
         }
-//        }
         return var1;
     }
 
