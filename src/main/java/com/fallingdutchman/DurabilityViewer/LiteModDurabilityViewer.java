@@ -61,14 +61,22 @@ public class LiteModDurabilityViewer implements LiteMod, Configurable
 
     @Expose
     @SerializedName("Static_Colour")
-    public String HexColour = "FFFFFF";
+    public String DurColour = "FFFFFF";
+
+    @Expose
+    @SerializedName("Arrow_Count")
+    public boolean ArrowCount = true;
+
+    @Expose
+    @SerializedName("Arrow_Count_Colour")
+    public String ArrowColour = "FFFFFF";
 
 
     public static LiteModDurabilityViewer instance;
 
     public LiteModDurabilityViewer() {
         if (instance != null) {
-            System.err.println("Error: Attempted to instantiate two instances of " + getName());
+            System.err.println("Error: Attempted to instantiate two instances of " + references.MOD_NAME);
         } else {
             instance = this;
         }
@@ -114,13 +122,17 @@ public class LiteModDurabilityViewer implements LiteMod, Configurable
                 //draw string
                 if (instance.RDurString)
                 {
-                    StringRenderer.Render(arg1, arg3, arg4, arg5);
+                    StringRenderer.RenderDura(arg1, arg3, arg4, arg5);
                 }
                 //draw bar
                 if (instance.RDurBar)
                 {
                     BarRenderer.Render(arg3, arg4, arg5);
                 }
+            }
+            if (arg3.getUnlocalizedName().equals("item.bow") && instance.ArrowCount)
+            {
+                StringRenderer.RenderArrowCount(arg1, arg3, arg4, arg5);
             }
         }
     }

@@ -2,13 +2,14 @@ package com.fallingdutchman.DurabilityViewer.Renderer;
 
 import com.fallingdutchman.DurabilityViewer.LiteModDurabilityViewer;
 import com.mumfrey.liteloader.util.log.LiteLoaderLogger;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
 
 public class StringRenderer
 {
-    public static void Render(FontRenderer Fr, ItemStack Item, int x, int y)
+    public static void RenderDura(FontRenderer Fr, ItemStack Item, int x, int y)
     {
         int Durability = Item.getMaxDamage() - Item.getItemDamage() + 1;
         String ItemDurability = Integer.toString(Durability);
@@ -20,13 +21,40 @@ public class StringRenderer
                 (LiteModDurabilityViewer.instance.DurSize.equals("small") ? 0.5F : 1.0F ),
                 (LiteModDurabilityViewer.instance.DurSize.equals("small") ? 0.5F : 1.0F ),
                 (LiteModDurabilityViewer.instance.DurSize.equals("small") ? 0.5F : 1.0F ));
-        Fr.drawStringWithShadow(DurText(Item), (x + 8) * 2 + 1 + Stringwidth / 2 - Stringwidth, (y + 11) * 2, Colour(Item));
+        Fr.drawStringWithShadow(DurText(Item), (x + 8) * 2 + 1 + Stringwidth / 2 - Stringwidth, (y + 11) * 2, DurColour(Item));
         GL11.glScalef(
                 (LiteModDurabilityViewer.instance.DurSize.equals("small") ? 2.0F : 1.0F ),
                 (LiteModDurabilityViewer.instance.DurSize.equals("small") ? 2.0F : 1.0F ),
                 (LiteModDurabilityViewer.instance.DurSize.equals("small") ? 2.0F : 1.0F ));
         GL11.glEnable(GL11.GL_LIGHTING);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
+    }
+
+    public static void RenderArrowCount(FontRenderer Fr,ItemStack Item,int x,int y)
+    {
+        int Stringwidth = Fr.getStringWidth(ArrowCount());
+
+        GL11.glDisable(GL11.GL_LIGHTING);
+        GL11.glDisable(GL11.GL_DEPTH_TEST);
+        GL11.glScalef(0.5F, 0.5F, 0.5F);
+        Fr.drawStringWithShadow(ArrowCount(), x * 2, y * 2, toDec(LiteModDurabilityViewer.instance.ArrowColour));
+        GL11.glScalef(2F, 2F, 2F);
+        GL11.glEnable(GL11.GL_LIGHTING);
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
+    }
+
+    private static String ArrowCount()
+    {
+        int arrowcount = 0;
+            ItemStack[] Inventory = Minecraft.getMinecraft().thePlayer.inventory.mainInventory;
+            for (ItemStack aInventory : Inventory)
+            {
+                if (aInventory != null && aInventory.getUnlocalizedName().equals("item.arrow"))
+                {
+                    arrowcount = aInventory.stackSize;
+                }
+            }
+        return Integer.toString(arrowcount);
     }
 
     private static String DurText(ItemStack item)
@@ -53,7 +81,7 @@ public class StringRenderer
 
 
     //TODO: figure out what the heck i am doing here.
-    private static int Colour(ItemStack item)
+    private static int DurColour(ItemStack item)
     {
         if (!LiteModDurabilityViewer.instance.StaticColour)
         {
@@ -64,7 +92,7 @@ public class StringRenderer
 
             return Integer.parseInt(toHex(Math.min(r + 100, 255), Math.min(g + 100, 255), 100), 16);
         }
-        return toDec(LiteModDurabilityViewer.instance.HexColour);
+        return toDec(LiteModDurabilityViewer.instance.DurColour);
     }
 
     private static int toDec(String Hex)

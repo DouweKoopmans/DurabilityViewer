@@ -2,6 +2,7 @@ package com.fallingdutchman.DurabilityViewer.Gui;
 
 import com.fallingdutchman.DurabilityViewer.LiteModDurabilityViewer;
 
+import com.fallingdutchman.DurabilityViewer.References.references;
 import com.mumfrey.liteloader.client.gui.GuiCheckbox;
 import com.mumfrey.liteloader.modconfig.ConfigPanel;
 import com.mumfrey.liteloader.modconfig.ConfigPanelHost;
@@ -15,8 +16,9 @@ import java.util.List;
 
 public class DurabilityViewerConfigPanel extends Gui implements ConfigPanel
 {
+    //privates
     private List<GuiCheckbox> SubButtonList = new ArrayList<GuiCheckbox>();
-    private GuiCheckbox DurbarBox, DurStringBox, StaticColourBox;
+    private GuiCheckbox DurbarBox, DurStringBox, StaticColourBox, ArrowCountBox;
     private GuiHexField textField;
     private LiteModDurabilityViewer mod;
     private final static int SPACING = 16;
@@ -25,6 +27,7 @@ public class DurabilityViewerConfigPanel extends Gui implements ConfigPanel
     private GuiButton activeButton;
     private FontRenderer fr;
 
+    //make sure the instances are initialized
     public DurabilityViewerConfigPanel()
     {
         mc = Minecraft.getMinecraft();
@@ -34,7 +37,7 @@ public class DurabilityViewerConfigPanel extends Gui implements ConfigPanel
     @Override
     public String getPanelTitle()
     {
-        return "Durability Viewer options";
+        return references.MOD_NAME + " options";
     }
 
     @Override
@@ -58,13 +61,15 @@ public class DurabilityViewerConfigPanel extends Gui implements ConfigPanel
         DurStringBox = new GuiCheckbox(id++, 10, SPACING * line++, "Draw durability string" );
         SubButtonList.add(DurbarBox = new GuiCheckbox(id++, 20, SPACING * line++,"Draw the default durability bar as well"));
         SubButtonList.add(StaticColourBox = new GuiCheckbox(id++, 20, SPACING * line++, "use a static colour"));
+        ArrowCountBox = new GuiCheckbox(id++, 10, SPACING * line++, "Draw arrowcount on the bow texture");
         textField = new GuiHexField(fr,BOX_WIDTH + 20 + fr.getStringWidth("use a static colour"), SPACING * 2, 48, 12 );
 
         DurbarBox.checked = LiteModDurabilityViewer.instance.RDurBar;
         DurStringBox.checked = LiteModDurabilityViewer.instance.RDurString;
         StaticColourBox.checked = LiteModDurabilityViewer.instance.StaticColour;
+        ArrowCountBox.checked = LiteModDurabilityViewer.instance.ArrowCount;
         textField.setEnabled(StaticColourBox.checked);
-        textField.setText(LiteModDurabilityViewer.instance.HexColour);
+        textField.setText(LiteModDurabilityViewer.instance.DurColour);
         textField.setMaxStringLength(6);
     }
 
@@ -84,6 +89,7 @@ public class DurabilityViewerConfigPanel extends Gui implements ConfigPanel
     public void drawPanel(ConfigPanelHost host, int mouseX, int mouseY, float partialTicks)
     {
         DurStringBox.drawButton(this.mc, mouseX, mouseY);
+        ArrowCountBox.drawButton(this.mc, mouseX,mouseY);
         if (DurStringBox.checked)
         {
             for (GuiButton button : SubButtonList)
@@ -118,6 +124,12 @@ public class DurabilityViewerConfigPanel extends Gui implements ConfigPanel
             textField.setEnabled(StaticColourBox.checked);
             textField.setFocused(!textField.isFocused());
         }
+        else if (ArrowCountBox.mousePressed(mc,mouseX, mouseY))
+        {
+            activeButton = ArrowCountBox;
+            LiteModDurabilityViewer.instance.ArrowCount = !LiteModDurabilityViewer.instance.ArrowCount;
+            ArrowCountBox.checked = LiteModDurabilityViewer.instance.ArrowCount;
+        }
         else
         {
             textField.mouseClicked(mouseX,mouseY,mouseButton);
@@ -147,7 +159,7 @@ public class DurabilityViewerConfigPanel extends Gui implements ConfigPanel
         this.textField.textboxKeyTyped(keyChar, keyCode);
         if (textField.isFocused() && (keyCode != org.lwjgl.input.Keyboard.KEY_ESCAPE || keyCode != org.lwjgl.input.Keyboard.KEY_TAB))
         {
-            LiteModDurabilityViewer.instance.HexColour = textField.getText();
+            LiteModDurabilityViewer.instance.DurColour = textField.getText();
         }
     }
 }
