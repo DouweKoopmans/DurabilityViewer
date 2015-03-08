@@ -3,7 +3,7 @@ package com.fallingdutchman.DurabilityViewer;
 import com.fallingdutchman.DurabilityViewer.Gui.DurabilityViewerConfigPanel;
 import com.fallingdutchman.DurabilityViewer.Renderer.BarRenderer;
 import com.fallingdutchman.DurabilityViewer.Renderer.StringRenderer;
-import com.fallingdutchman.DurabilityViewer.References.references;
+import com.fallingdutchman.DurabilityViewer.Utils.references;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -27,7 +27,8 @@ import java.io.File;
 @ExposableOptions(strategy = ConfigStrategy.Unversioned, filename = "DurabilityViewer.config.json")
 public class LiteModDurabilityViewer implements LiteMod, Configurable
 {
-    /**configurations*/
+    //configurations
+    //TODO: look into combining a bunch of these options in maps
     @Expose
     @SerializedName("Durability_bar")
     public boolean RDurBar = true;
@@ -48,9 +49,9 @@ public class LiteModDurabilityViewer implements LiteMod, Configurable
      *
      * possibilities:
      *  1 = remaining uses
-     *  2 = precentage
+     *  2 = percentage
      *  3 = remaining uses/max uses
-     **/
+     **///TODO: look into replacing this system with something more user friendly.
     @Expose
     @SerializedName("Durability_text_mode")
     public int DurMode = 1;
@@ -61,7 +62,7 @@ public class LiteModDurabilityViewer implements LiteMod, Configurable
 
     @Expose
     @SerializedName("Static_Colour")
-    public String DurColour = "FFFFFF";
+    public int[] DurColour = new int[3];
 
     @Expose
     @SerializedName("Arrow_Count")
@@ -69,9 +70,10 @@ public class LiteModDurabilityViewer implements LiteMod, Configurable
 
     @Expose
     @SerializedName("Arrow_Count_Colour")
-    public String ArrowColour = "FFFFFF";
+    public int[] ArrowColour = new int[3];
 
 
+    //actual class methods
     public static LiteModDurabilityViewer instance;
 
     public LiteModDurabilityViewer() {

@@ -1,6 +1,6 @@
 package com.fallingdutchman.DurabilityViewer.Transformer;
 
-import com.fallingdutchman.DurabilityViewer.References.references;
+import com.fallingdutchman.DurabilityViewer.Utils.references;
 import com.mumfrey.liteloader.transformers.event.Event;
 import com.mumfrey.liteloader.transformers.event.EventInjectionTransformer;
 import com.mumfrey.liteloader.transformers.event.MethodInfo;

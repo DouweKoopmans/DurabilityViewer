@@ -18,14 +18,13 @@ buildscript {
 
 apply plugin: 'liteloader'
 
-version = "0.5"
-group= "com.fallingdutchman.DurabilityViewer" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "Durability Viewer"
+archivesBaseName = "DurabilityViewer"
 
 minecraft {
     version = "1.7.10"
-    runDir = "eclipse"
+    runDir = "eclipse/assets"
     replace "@VERSION@", project.version
+    assetDir = "/src/main/resources/assets"
 }
 
 processResources
@@ -39,7 +38,7 @@ processResources
             }
 
             // copy everything else, thats not the mcmod.info
-            //from(sourceSets.main.resources.srcDirs) {
-            //    exclude 'litemod.json'
-            //}
+            from(sourceSets.main.resources.srcDirs) {
+                exclude 'litemod.json'
+            }
         }

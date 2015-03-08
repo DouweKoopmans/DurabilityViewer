@@ -1,4 +1,4 @@
-package com.fallingdutchman.DurabilityViewer.References;
+package com.fallingdutchman.DurabilityViewer.Utils;
 
 public final class references
 {

@@ -1,12 +1,9 @@
 package com.fallingdutchman.DurabilityViewer.Config;
 
-import com.fallingdutchman.DurabilityViewer.References.references;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.mumfrey.liteloader.core.LiteLoader;
-import com.mumfrey.liteloader.modconfig.ConfigStrategy;
 import com.mumfrey.liteloader.modconfig.Exposable;
-import com.mumfrey.liteloader.modconfig.ExposableOptions;
 
 
 public class Configurations implements Exposable
