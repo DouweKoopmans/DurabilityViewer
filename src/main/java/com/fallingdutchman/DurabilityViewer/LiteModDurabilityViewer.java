@@ -3,6 +3,7 @@ package com.fallingdutchman.DurabilityViewer;
 import com.fallingdutchman.DurabilityViewer.Gui.DurabilityViewerConfigPanel;
 import com.fallingdutchman.DurabilityViewer.Renderer.BarRenderer;
 import com.fallingdutchman.DurabilityViewer.Renderer.StringRenderer;
+import com.fallingdutchman.DurabilityViewer.Utils.DvUtils;
 import com.fallingdutchman.DurabilityViewer.Utils.references;
 
 import com.google.gson.annotations.Expose;
@@ -15,9 +16,12 @@ import com.mumfrey.liteloader.modconfig.ConfigStrategy;
 import com.mumfrey.liteloader.modconfig.ExposableOptions;
 import com.mumfrey.liteloader.transformers.event.EventInfo;
 
+import com.mumfrey.liteloader.util.log.LiteLoaderLogger;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import org.lwjgl.opengl.GL11;
@@ -25,10 +29,9 @@ import org.lwjgl.opengl.GL11;
 import java.io.File;
 
 @ExposableOptions(strategy = ConfigStrategy.Unversioned, filename = "DurabilityViewer.config.json")
-public class LiteModDurabilityViewer implements LiteMod, Configurable
+public class LiteModDurabilityViewer implements LiteMod, Configurable //TODO add the ability to display the current armor status.
 {
     //configurations
-    //TODO: look into combining a bunch of these options in maps
     @Expose
     @SerializedName("Durability_bar")
     public boolean RDurBar = true;
@@ -50,8 +53,7 @@ public class LiteModDurabilityViewer implements LiteMod, Configurable
      * possibilities:
      *  1 = remaining uses
      *  2 = percentage
-     *  3 = remaining uses/max uses
-     **///TODO: look into replacing this system with something more user friendly.
+     **/
     @Expose
     @SerializedName("Durability_text_mode")
     public int DurMode = 1;
@@ -78,7 +80,9 @@ public class LiteModDurabilityViewer implements LiteMod, Configurable
 
     public LiteModDurabilityViewer() {
         if (instance != null) {
-            System.err.println("Error: Attempted to instantiate two instances of " + references.MOD_NAME);
+            LiteLoaderLogger.severe("###########################################################################");
+            LiteLoaderLogger.severe("Error: Attempted to instantiate two instances of " + references.MOD_NAME);
+            LiteLoaderLogger.severe("###########################################################################");
         } else {
             instance = this;
         }
@@ -132,9 +136,10 @@ public class LiteModDurabilityViewer implements LiteMod, Configurable
                     BarRenderer.Render(arg3, arg4, arg5);
                 }
             }
-            if (arg3.getUnlocalizedName().equals("item.bow") && instance.ArrowCount)
+            //checks if the current itemstack is a bow item
+            if (instance.ArrowCount && arg3.getItem().equals(Item.getItemById(261)) && DvUtils.inInv(arg3))
             {
-                StringRenderer.RenderArrowCount(arg1, arg3, arg4, arg5);
+                StringRenderer.RenderArrowCount(arg1, arg4, arg5);
             }
         }
     }

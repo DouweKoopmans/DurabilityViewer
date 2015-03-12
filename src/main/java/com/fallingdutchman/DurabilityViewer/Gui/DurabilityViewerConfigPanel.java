@@ -1,6 +1,5 @@
 package com.fallingdutchman.DurabilityViewer.Gui;
 
-import com.fallingdutchman.DurabilityViewer.Gui.ColourPicker.GuiColouredButton;
 import com.fallingdutchman.DurabilityViewer.Gui.ColourPicker.GuiControl;
 import com.fallingdutchman.DurabilityViewer.LiteModDurabilityViewer;
 
@@ -9,7 +8,6 @@ import com.fallingdutchman.DurabilityViewer.Utils.references;
 import com.mumfrey.liteloader.client.gui.GuiCheckbox;
 import com.mumfrey.liteloader.modconfig.ConfigPanel;
 import com.mumfrey.liteloader.modconfig.ConfigPanelHost;
-import com.mumfrey.liteloader.util.log.LiteLoaderLogger;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
@@ -19,25 +17,21 @@ import java.util.*;
 
 public class DurabilityViewerConfigPanel extends Gui implements ConfigPanel
 {
-    //privates
     //maps and lists
     private List<GuiColourConfigLine> ColouredConfigLines = new ArrayList<GuiColourConfigLine>();
-    private HashMap<Object, Boolean> GuiButtons = new HashMap<Object, Boolean>();
+    private List<Object> GuiButtons = new ArrayList<Object>();
+    private ArrayList<GuiRadioButton> RadioButtons = new ArrayList<GuiRadioButton>();
 
     //class refrences
-    private GuiColourConfigLine StaticColour;
-    private GuiCheckbox DurbarBox, DurStringBox, StaticColourBox, ArrowCountBox;
+    private GuiColourConfigLine StaticColour, ArrowColour;
+    private GuiCheckbox DurbarBox, DurStringBox;
+    private GuiRadioController RadioController;
     private LiteModDurabilityViewer mod;
     private Minecraft mc;
     public static GuiButton activeButton;
 
     //constants
     private final static int SPACING = 16;
-
-    //unused - likely to be removed soon
-    private List<GuiButton> ButtonList = new ArrayList<GuiButton>();
-    private List<GuiButton> SubButtonList = new ArrayList<GuiButton>();
-    private List<GuiColouredButton> colouredbuttons = new ArrayList<GuiColouredButton>();
 
     //make sure the instances are initialized
     public DurabilityViewerConfigPanel()
@@ -57,8 +51,8 @@ public class DurabilityViewerConfigPanel extends Gui implements ConfigPanel
         return SPACING * (ColouredConfigLines.size() + GuiButtons.size());
     }
 
-    //TODO: add option to change the DurMode -> look into drop down menus
-    //TODO: add option to change DurSize -> look into drop down menus
+
+    //TODO: add option to change DurSize
     @Override
     public void onPanelShown(ConfigPanelHost host)
     {
@@ -69,47 +63,45 @@ public class DurabilityViewerConfigPanel extends Gui implements ConfigPanel
         int id = 0;
         int line = 0;
 
-//        this.SubButtonList.clear();
-//        this.ButtonList.clear();
+        int RankOne = 10;
+        int RankTwo = 20;
+
         this.GuiButtons.clear();
         this.ColouredConfigLines.clear();
 
-        //ButtonList.add(DurStringBox = new GuiCheckbox(id++, 10, SPACING * line++, "Draw durability string" ));
-        //ButtonList.add(ArrowCountBox = new GuiCheckbox(id++, 10, SPACING * line++, "Draw arrowcount on the bow texture"));
-
-        //SubButtonList.add(DurbarBox = new GuiCheckbox(id++, 20, SPACING * line++,"Draw the default durability bar as well"));
-        //SubButtonList.add(StaticColourBox = new GuiCheckbox(id++, 20, SPACING * line++, "use a static colour"));
-        //SubButtonList.add(Colouredbutton = new GuiColouredButton(this.mc, id++, 38, SPACING * 2, 48, 12, ColourUtils.toDec(ColourUtils.toHex(
-//                LiteModDurabilityViewer.instance.ArrowColour[0],
-//                LiteModDurabilityViewer.instance.ArrowColour[1],
-//                LiteModDurabilityViewer.instance.ArrowColour[2])),""));
-
-        GuiButtons.put(DurStringBox = new GuiCheckbox(id++, 10, SPACING * line++, "Draw durability string" ), false);
-        GuiButtons.put(DurbarBox = new GuiCheckbox(id++, 20, SPACING * line++,"Draw the default durability bar as well"), true);
-        GuiButtons.put(StaticColour = new GuiColourConfigLine(this.mc, id++, 20, SPACING * line++, "Use static colour", ColourUtils.toDec(ColourUtils.toHex(
-                LiteModDurabilityViewer.instance.DurColour[0],
-                LiteModDurabilityViewer.instance.DurColour[1],
-                LiteModDurabilityViewer.instance.DurColour[2])),
+        GuiButtons.add(DurStringBox = new GuiCheckbox(id++, RankOne, SPACING * line++, "Draw durability string"));
+        GuiButtons.add(DurbarBox = new GuiCheckbox(id++, RankTwo, SPACING * line++, "Draw the default durability bar as well"));
+        GuiButtons.add(StaticColour = new GuiColourConfigLine(this.mc, id++, RankTwo, SPACING * line++, "Use static colour",
+                ColourUtils.RGBConverter(LiteModDurabilityViewer.instance.DurColour).getRGB(),
                 LiteModDurabilityViewer.instance.StaticColour,
-                LiteModDurabilityViewer.instance.RDurString), true);
-        GuiButtons.put(ArrowCountBox = new GuiCheckbox(id++, 10, SPACING * line++, "Draw arrowcount on the bow texture"), false);
-        ColouredConfigLines.add(StaticColour);
+                LiteModDurabilityViewer.instance.RDurString));
 
-//        for (GuiButton button : GuiButtons)
-//        {
-//            ButtonList.add(button);
-//            if (button instanceof GuiControl)
-//            {
-//                colouredbuttons.add((GuiColouredButton) button);
-//            }
-//        }
+        RadioButtons.add(new GuiRadioButton(id++, RankTwo, SPACING *line++, "this is a test - 1"));
+        RadioButtons.add(new GuiRadioButton(id++, RankTwo, SPACING *line++, "this is a test - 2"));
+        GuiRadioButton[] radioButtons = new GuiRadioButton[RadioButtons.size()];
 
+        GuiButtons.add(ArrowColour = new GuiColourConfigLine(this.mc, id++, RankOne, SPACING *line++, "Display arrowcount in the hud",
+                ColourUtils.RGBConverter(LiteModDurabilityViewer.instance.ArrowColour).getRGB(),
+                LiteModDurabilityViewer.instance.ArrowCount,
+                true));
+        RadioController = new GuiRadioController(RadioButtons.toArray(radioButtons), LiteModDurabilityViewer.instance.DurMode, LiteModDurabilityViewer.instance.RDurString);
+
+        for (GuiRadioButton button: RadioButtons)
+        {
+            GuiButtons.add(button);
+        }
+
+        for (Object button : GuiButtons)
+        {
+            if (button instanceof GuiColourConfigLine)
+            {
+                ColouredConfigLines.add((GuiColourConfigLine) button);
+            }
+        }
 
         DurStringBox.checked = LiteModDurabilityViewer.instance.RDurString;
         DurbarBox.checked = LiteModDurabilityViewer.instance.RDurBar && DurStringBox.checked;
         DurbarBox.enabled = DurStringBox.checked;
-//        StaticColourBox.checked = LiteModDurabilityViewer.instance.StaticColour;
-        ArrowCountBox.checked = LiteModDurabilityViewer.instance.ArrowCount;
     }
 
     @Override
@@ -122,14 +114,13 @@ public class DurabilityViewerConfigPanel extends Gui implements ConfigPanel
     @Override
     public void onPanelHidden()
     {
-        for (boolean state : StaticColour.save().keySet())
-        {
-            LiteModDurabilityViewer.instance.StaticColour = state;
+        LiteModDurabilityViewer.instance.StaticColour = StaticColour.getChecked() && LiteModDurabilityViewer.instance.RDurString;
+        LiteModDurabilityViewer.instance.DurColour = ColourUtils.CurrentRGB(StaticColour.getColour());
+        LiteModDurabilityViewer.instance.ArrowCount = ArrowColour.getChecked();
+        LiteModDurabilityViewer.instance.ArrowColour = ColourUtils.CurrentRGB(ArrowColour.getColour());
+        LiteModDurabilityViewer.instance.DurMode = RadioController.getSettings();
 
-            LiteModDurabilityViewer.instance.DurColour = ColourUtils.CurrentRGB(StaticColour.save().get(state));
-        }
         mod.writeConfig();
-        LiteLoaderLogger.info("" + LiteModDurabilityViewer.instance.StaticColour);
     }
 
     @Override
@@ -138,46 +129,29 @@ public class DurabilityViewerConfigPanel extends Gui implements ConfigPanel
     @Override
     public void drawPanel(ConfigPanelHost host, int mouseX, int mouseY, float partialTicks)
     {
-        for (Object button : GuiButtons.keySet())
+        for (Object button : GuiButtons)
         {
             if (button instanceof GuiButton)
             {
                 GuiButton _button = (GuiButton) button;
                 _button.drawButton(this.mc, mouseX, mouseY);
             }
-            //else if (button instanceof GuiColourConfigLine)
-            //{
-//                GuiColourConfigLine line = (GuiColourConfigLine) button;
-//                line.draw(mouseX,mouseY);
-//            }
+            else if (button instanceof GuiColourConfigLine)
+            {
+                ((GuiColourConfigLine) button).draw(mouseX,mouseY);
+            }
         }
-
         for (GuiColourConfigLine line : ColouredConfigLines)
         {
-            line.draw(mouseX,mouseY);
+            line.drawPicker(mouseX, mouseY);
         }
-//        for (GuiButton button : ButtonList)
-//        {
-//            if (!SubButtonList.contains(button))
-//            {
-//                button.drawButton(this.mc,mouseX, mouseY);
-//            }
-//            if (DurStringBox.checked)
-//            {
-//                button.drawButton(this.mc, mouseX, mouseY);
-//                if (colouredbuttons.contains(button))
-//                {
-//                   GuiColouredButton Colourbutton = (GuiColouredButton) button;
-//                   Colourbutton.drawPicker(this.mc,mouseX,mouseY);
-//                }
-//            }
-//        }
+
     }
 
     @Override
     public void mousePressed(ConfigPanelHost host, int mouseX, int mouseY, int mouseButton)
     {
-        for (Object button : GuiButtons.keySet())
+        for (Object button : GuiButtons)
         {
             if (button instanceof GuiButton)
             {
@@ -190,7 +164,8 @@ public class DurabilityViewerConfigPanel extends Gui implements ConfigPanel
                     {
                         LiteModDurabilityViewer.instance.RDurBar = !LiteModDurabilityViewer.instance.RDurBar;
                         DurbarBox.checked = LiteModDurabilityViewer.instance.RDurBar;
-                    } else if (button.equals(DurStringBox))
+                    }
+                    else if (button.equals(DurStringBox))
                     {
                         LiteModDurabilityViewer.instance.RDurString = !LiteModDurabilityViewer.instance.RDurString;
                         DurStringBox.checked = LiteModDurabilityViewer.instance.RDurString;
@@ -198,16 +173,13 @@ public class DurabilityViewerConfigPanel extends Gui implements ConfigPanel
                         DurbarBox.enabled = DurStringBox.checked;
                         DurbarBox.checked = DurStringBox.checked && LiteModDurabilityViewer.instance.RDurBar;
 
+                        RadioController.Refresh(LiteModDurabilityViewer.instance.RDurString);
                         //refresh the coloured buttons.
                         StaticColour.refresh(LiteModDurabilityViewer.instance.RDurString);
-                    } /*else if (button.equals(StaticColourBox))
-                {
-                    LiteModDurabilityViewer.instance.StaticColour = !LiteModDurabilityViewer.instance.StaticColour;
-                    StaticColourBox.checked = LiteModDurabilityViewer.instance.StaticColour;
-                } */ else if (button.equals(ArrowCountBox))
+                    }
+                    else if (button instanceof GuiRadioButton)
                     {
-                        LiteModDurabilityViewer.instance.ArrowCount = !LiteModDurabilityViewer.instance.ArrowCount;
-                        ArrowCountBox.checked = LiteModDurabilityViewer.instance.ArrowCount;
+                        RadioController.mousePressed((GuiRadioButton)button);
                     }
                 }
             }
@@ -218,42 +190,7 @@ public class DurabilityViewerConfigPanel extends Gui implements ConfigPanel
                 _button.mousePressed(mouseX,mouseY);
             }
         }
-/*        for (GuiColourConfigLine colourbutton : ColouredConfigLines)
-        {
-            colourbutton.mousePressed(mouseX,mouseY);
-        }
-        for (GuiButton button : ButtonList)
-        {
-            if (button.mousePressed(this.mc, mouseX, mouseY))
-            {
-                activeButton = button;
-
-                if (button.equals(DurbarBox))
-                {
-                    LiteModDurabilityViewer.instance.RDurBar = !LiteModDurabilityViewer.instance.RDurBar;
-                    DurbarBox.checked = LiteModDurabilityViewer.instance.RDurBar;
-                } else if (button.equals(DurStringBox))
-                {
-                    LiteModDurabilityViewer.instance.RDurBar = !LiteModDurabilityViewer.instance.RDurBar;
-                    DurbarBox.checked = LiteModDurabilityViewer.instance.RDurBar;
-                } else if (button.equals(StaticColourBox))
-                {
-                    LiteModDurabilityViewer.instance.StaticColour = !LiteModDurabilityViewer.instance.StaticColour;
-                    StaticColourBox.checked = LiteModDurabilityViewer.instance.StaticColour;
-                } else if (button.equals(ArrowCountBox))
-                {
-                    LiteModDurabilityViewer.instance.ArrowCount = !LiteModDurabilityViewer.instance.ArrowCount;
-                    ArrowCountBox.checked = LiteModDurabilityViewer.instance.ArrowCount;
-                } else
-                {
-                    for (GuiColouredButton colourbutton : colouredbuttons)
-                    {
-                        colourbutton.mousePressed(mc, mouseX, mouseY);
-                    }
-                }
-            }
-        }
-*/    }
+    }
 
     @Override
     public void mouseReleased(ConfigPanelHost host, int mouseX, int mouseY, int mouseButton)
@@ -263,7 +200,7 @@ public class DurabilityViewerConfigPanel extends Gui implements ConfigPanel
             activeButton.func_146111_b(mouseX, mouseY);
             if (activeButton instanceof GuiControl)
             {
-                ((GuiButton) activeButton).mouseReleased(mouseX, mouseY);
+                activeButton.mouseReleased(mouseX, mouseY);
             }
             activeButton = null;
         }
@@ -280,4 +217,9 @@ public class DurabilityViewerConfigPanel extends Gui implements ConfigPanel
 
     @Override
     public void mouseMoved(ConfigPanelHost host, int mouseX, int mouseY){}
+
+    public static void setActiveButton(GuiButton button)
+    {
+        activeButton = button;
+    }
 }

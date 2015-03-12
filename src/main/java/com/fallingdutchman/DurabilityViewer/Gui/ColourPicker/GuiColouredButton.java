@@ -1,21 +1,23 @@
 package com.fallingdutchman.DurabilityViewer.Gui.ColourPicker;
 
-import com.fallingdutchman.DurabilityViewer.LiteModDurabilityViewer;
 import static org.lwjgl.opengl.GL11.glColor4f;
-
-import com.fallingdutchman.DurabilityViewer.Utils.ColourUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 
 public class GuiColouredButton extends GuiControl
 {
     private int colour;
     private GuiColourPicker picker;
     private boolean pickerClicked = false;
+    private String displayText;
+    private FontRenderer fr;
 
     public GuiColouredButton(Minecraft minecraft, int controlId, int xPos, int yPos, int controlWidth, int controlHeight,int colour ,String displayText)
     {
         super(minecraft, controlId, xPos, yPos, controlWidth, controlHeight,displayText);
         this.colour = colour;
+        this.displayText = displayText;
+        this.fr = Minecraft.getMinecraft().fontRenderer;
     }
 
     public int getColour()
@@ -23,22 +25,15 @@ public class GuiColouredButton extends GuiControl
         return this.colour;
     }
 
-    //public void save()
-    //{
-//        LiteModDurabilityViewer.instance.ArrowColour = ColourUtils.CurrentRGB(this.colour);
-//    }
-
     @Override
     public void drawControl(Minecraft minecraft, int mouseX, int mouseY)
     {
         if (this.visible)
         {
-            boolean mouseOver = mouseX >= this.xPosition && mouseY >= this.yPosition && mouseX < this.xPosition + this.width && mouseY < this.yPosition + this.height;
-            int borderColour = mouseOver || this.picker != null ? 0xFFFFFFFF : 0xFFA0A0A0;
+            boolean ButtonmouseOver = mouseX >= this.xPosition && mouseY >= this.yPosition && mouseX < this.xPosition + this.width && mouseY < this.yPosition + this.height;
+            int borderColour = ButtonmouseOver || this.picker != null ? 0xFFFFFFFF : 0xFFA0A0A0;
 
             drawRect(this.xPosition, this.yPosition, this.xPosition + this.width, this.yPosition + this.height, borderColour);
-
-            int v = Math.min(Math.max((int) (((float) this.height / (float) this.width) * 1024F), 256), 1024);
 
             glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
@@ -46,9 +41,12 @@ public class GuiColouredButton extends GuiControl
 
             super.mouseDragged(minecraft, mouseX, mouseY);
 
+            boolean StringmouseOver = mouseX >= this.xPosition - 18 && mouseY >= this.yPosition && mouseX < this.xPosition + fr.getStringWidth(displayText) && mouseY < this.yPosition + this.height;
+            int StringColour = this.enabled ? (StringmouseOver ? 0xFFFFA0 : 0xFFFFFFFF) : 0xFFA0A0A0;
+
             if (this.displayString != null && this.displayString.length() > 0)
             {
-                this.drawString(minecraft.fontRenderer, this.displayString, this.xPosition + this.width + 8, this.yPosition + (this.height - 8) / 2, this.enabled ? 0xFFFFFFFF : 0xFFA0A0A0);
+                this.drawString(minecraft.fontRenderer, this.displayString, this.xPosition + this.width + 8, this.yPosition + (this.height - 8) / 2, StringColour);
             }
         }
     }

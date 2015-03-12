@@ -2,60 +2,51 @@ package com.fallingdutchman.DurabilityViewer.Gui;
 
 import com.fallingdutchman.DurabilityViewer.Gui.ColourPicker.GuiColouredButton;
 import com.mumfrey.liteloader.client.gui.GuiCheckbox;
-import com.mumfrey.liteloader.util.log.LiteLoaderLogger;
 import net.minecraft.client.Minecraft;
-
-import java.util.HashMap;
+import net.minecraft.client.gui.FontRenderer;
 
 public class GuiColourConfigLine
 {
-    private int x;
-    private int y;
-    private int BOX_WIDTH = 18;
-    private String DisplayString;
     private GuiCheckbox Checkbox;
     private GuiColouredButton ColouredButton;
     private Minecraft mc;
+    private FontRenderer fr;
     private boolean checked;
+    int x, y, height;
+    String DisplayString;
 
     public GuiColourConfigLine(Minecraft mc, int Id, int xPos, int yPos, String DisplayString, int Colour, boolean checked, boolean enabled)
     {
+        this.mc = mc;
+        this.fr = this.mc.fontRenderer;
+        this.checked = checked;
+        int BOX_WIDTH = 18;
         this.x = xPos;
         this.y = yPos;
+        this.height = 12;
+        int width = 24;
         this.DisplayString = DisplayString;
-        this.mc = mc;
-        this.checked = checked;
 
-                Checkbox = new GuiCheckbox(Id++, xPos, yPos, null);
+        Checkbox = new GuiCheckbox(Id++, xPos, yPos, null);
         Checkbox.checked = checked && enabled;
         Checkbox.enabled = enabled;
 
-        ColouredButton = new GuiColouredButton(mc,Id++, xPos + BOX_WIDTH, yPos, 24, 12, Colour ,DisplayString);
+        ColouredButton = new GuiColouredButton(mc,Id++, xPos + BOX_WIDTH, yPos, width, this.height, Colour ,DisplayString);
         ColouredButton.enabled = Checkbox.checked && Checkbox.enabled;
-    }
-
-    public HashMap<Boolean,Integer> save()
-    {
-        HashMap<Boolean,Integer> save = new HashMap<Boolean, Integer>();
-        save.put(checked,ColouredButton.getColour());
-
-        return save;
     }
 
     public void mousePressed(int mouseX, int mouseY)
     {
         if (Checkbox.mousePressed(this.mc, mouseX, mouseY))
         {
-            LiteLoaderLogger.info("checkbox pressed");
-            DurabilityViewerConfigPanel.activeButton = Checkbox;
+            DurabilityViewerConfigPanel.setActiveButton(Checkbox);
             Checkbox.checked = !checked;
             checked = !checked;
             ColouredButton.enabled = checked;
         }
         else if (ColouredButton.mousePressed(this.mc, mouseX, mouseY))
         {
-            LiteLoaderLogger.info("colouredbutton pressed");
-            DurabilityViewerConfigPanel.activeButton = ColouredButton;
+            DurabilityViewerConfigPanel.setActiveButton(ColouredButton);
         }
     }
 
@@ -63,7 +54,11 @@ public class GuiColourConfigLine
     {
         Checkbox.drawButton(this.mc,mouseX,mouseY);
         ColouredButton.drawButton(this.mc,mouseX,mouseY);
-        ColouredButton.drawPicker(this.mc,mouseX,mouseY);
+    }
+
+    public void drawPicker(int mouseX, int mouseY)
+    {
+        ColouredButton.drawPicker(this.mc, mouseX, mouseY);
     }
 
     //this should take the config line it needs to check against and update the checkbox and colour box accordingly.
@@ -77,5 +72,15 @@ public class GuiColourConfigLine
     public void keyPressed(char keyChar, int keyCode)
     {
         ColouredButton.keyTyped(keyChar,keyCode);
+    }
+
+    public int getColour()
+    {
+        return ColouredButton.getColour();
+    }
+
+    public boolean getChecked()
+    {
+        return checked;
     }
 }

@@ -5,6 +5,7 @@ import com.fallingdutchman.DurabilityViewer.Utils.ColourUtils;
 import com.mumfrey.liteloader.util.log.LiteLoaderLogger;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
 
@@ -31,14 +32,12 @@ public class StringRenderer
         GL11.glEnable(GL11.GL_DEPTH_TEST);
     }
 
-    public static void RenderArrowCount(FontRenderer Fr,ItemStack Item,int x,int y)
+    public static void RenderArrowCount(FontRenderer Fr,int x,int y)
     {
-        String colour = ColourUtils.toHex(LiteModDurabilityViewer.instance.ArrowColour[0], LiteModDurabilityViewer.instance.ArrowColour[1], LiteModDurabilityViewer.instance.ArrowColour[2]);
-
         GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glDisable(GL11.GL_DEPTH_TEST);
         GL11.glScalef(0.5F, 0.5F, 0.5F);
-        Fr.drawStringWithShadow(ArrowCount(), x * 2, y * 2, ColourUtils.toDec(colour));
+        Fr.drawStringWithShadow(ArrowCount(), x * 2, y * 2, ColourUtils.RGBConverter(LiteModDurabilityViewer.instance.ArrowColour).getRGB());
         GL11.glScalef(2F, 2F, 2F);
         GL11.glEnable(GL11.GL_LIGHTING);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
@@ -47,14 +46,16 @@ public class StringRenderer
     private static String ArrowCount()
     {
         int arrowcount = 0;
-            ItemStack[] Inventory = Minecraft.getMinecraft().thePlayer.inventory.mainInventory;
-            for (ItemStack aInventory : Inventory)
+        ItemStack[] Inventory = Minecraft.getMinecraft().thePlayer.inventory.mainInventory;
+
+        for (ItemStack item : Inventory)
+        {
+            //checks if aInventory is an arrow
+            if (item != null && item.getItem().equals(Item.getItemById(262)))
             {
-                if (aInventory != null && aInventory.getUnlocalizedName().equals("item.arrow"))
-                {
-                    arrowcount = aInventory.stackSize;
-                }
+                arrowcount = item.stackSize;
             }
+        }
         return Integer.toString(arrowcount);
     }
 
@@ -64,15 +65,13 @@ public class StringRenderer
         if (LiteModDurabilityViewer.instance.DurMode == 1)
         {
             Text = Integer.toString(item.getMaxDamage() - item.getItemDamage() + 1);
-        }else if (LiteModDurabilityViewer.instance.DurMode == 2)
+        }
+        else if (LiteModDurabilityViewer.instance.DurMode == 2)
         {
-            Text = Integer.toString(item.getItemDamage() + 1 / item.getMaxDamage() * 100);
-        }else if (LiteModDurabilityViewer.instance.DurMode == 3)
+            Text = Integer.toString((int) (((float)item.getMaxDamage() - (float) item.getItemDamage() + 1.0F) / (float)item.getMaxDamage() * 100.0F)) + "%";
+        }
+        else
         {
-            Text = Integer.toString(item.getItemDamage() + 1) + "/" +  Integer.toString(item.getMaxDamage());
-        } else
-        {
-            LiteLoaderLogger.severe("durability settings broken, fixing this now, please go into settings and reselect the setting you want to use");
             LiteModDurabilityViewer.instance.DurMode = 1;
             Text = Integer.toString(item.getMaxDamage() - item.getItemDamage() + 1);
         }
