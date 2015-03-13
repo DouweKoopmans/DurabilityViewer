@@ -2,6 +2,7 @@ package com.fallingdutchman.DurabilityViewer;
 
 import com.fallingdutchman.DurabilityViewer.Gui.DurabilityViewerConfigPanel;
 import com.fallingdutchman.DurabilityViewer.Renderer.BarRenderer;
+import com.fallingdutchman.DurabilityViewer.Renderer.Hud.ArmourRegister;
 import com.fallingdutchman.DurabilityViewer.Renderer.StringRenderer;
 import com.fallingdutchman.DurabilityViewer.Utils.DvUtils;
 import com.fallingdutchman.DurabilityViewer.Utils.references;
@@ -9,26 +10,30 @@ import com.fallingdutchman.DurabilityViewer.Utils.references;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.mumfrey.liteloader.Configurable;
+import com.mumfrey.liteloader.HUDRenderListener;
+import com.mumfrey.liteloader.JoinGameListener;
 import com.mumfrey.liteloader.LiteMod;
 import com.mumfrey.liteloader.core.LiteLoader;
 import com.mumfrey.liteloader.modconfig.ConfigPanel;
 import com.mumfrey.liteloader.modconfig.ConfigStrategy;
 import com.mumfrey.liteloader.modconfig.ExposableOptions;
 import com.mumfrey.liteloader.transformers.event.EventInfo;
-import com.mumfrey.liteloader.util.log.LiteLoaderLogger;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import net.minecraft.network.INetHandler;
+import net.minecraft.network.play.server.S01PacketJoinGame;
 import org.lwjgl.opengl.GL11;
 
 import java.io.File;
 
 @ExposableOptions(strategy = ConfigStrategy.Unversioned, filename = "DurabilityViewer.config.json")
-public class LiteModDurabilityViewer implements LiteMod, Configurable //TODO add the ability to display the current armor status.
+public class LiteModDurabilityViewer implements LiteMod, Configurable, HUDRenderListener, JoinGameListener
 {
     //configurations
     @Expose
@@ -82,15 +87,18 @@ public class LiteModDurabilityViewer implements LiteMod, Configurable //TODO add
 
     //actual class methods
     public static LiteModDurabilityViewer instance;
+    private Minecraft mc;
+    private ArmourRegister AR;
 
     public LiteModDurabilityViewer() {
         if (instance != null) {
-            LiteLoaderLogger.severe("###########################################################################");
-            LiteLoaderLogger.severe("Error: Attempted to instantiate two instances of " + references.MOD_NAME);
-            LiteLoaderLogger.severe("###########################################################################");
+            DvUtils.log.error("###########################################################################");
+            DvUtils.log.error("Error: Attempted to instantiate two instances of " + references.MOD_NAME);
+            DvUtils.log.error("###########################################################################");
         } else {
             instance = this;
         }
+        mc = Minecraft.getMinecraft();
     }
 
     @Override
@@ -150,6 +158,20 @@ public class LiteModDurabilityViewer implements LiteMod, Configurable //TODO add
     }
 
     @Override
+    public void onJoinGame(INetHandler netHandler, S01PacketJoinGame joinGamePacket)
+    {
+        ItemStack[] ArmourSlots = mc.thePlayer.inventory.armorInventory;
+        RenderItem ItemRenderer = new RenderItem();
+        AR = new ArmourRegister(ArmourSlots, this.mc, ItemRenderer);
+    }
+
+    @Override
+    public void onPostRenderHUD(int screenWidth, int screenHeight)
+    {
+        AR.Render(screenWidth,screenHeight);
+    }
+
+    @Override
     public Class<? extends ConfigPanel> getConfigPanelClass()
     {
         return DurabilityViewerConfigPanel.class;
@@ -166,4 +188,7 @@ public class LiteModDurabilityViewer implements LiteMod, Configurable //TODO add
 
     @Override
     public void upgradeSettings(String version, File configPath, File oldConfigPath){}
+
+    @Override
+    public void onPreRenderHUD(int screenWidth, int screenHeight){}
 }
