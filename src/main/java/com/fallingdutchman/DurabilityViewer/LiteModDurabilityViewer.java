@@ -15,9 +15,8 @@ import com.mumfrey.liteloader.modconfig.ConfigPanel;
 import com.mumfrey.liteloader.modconfig.ConfigStrategy;
 import com.mumfrey.liteloader.modconfig.ExposableOptions;
 import com.mumfrey.liteloader.transformers.event.EventInfo;
-
 import com.mumfrey.liteloader.util.log.LiteLoaderLogger;
-import net.minecraft.client.Minecraft;
+
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.texture.TextureManager;
@@ -44,19 +43,25 @@ public class LiteModDurabilityViewer implements LiteMod, Configurable //TODO add
     @SerializedName("Draw_durability_string")
     public boolean RDurString = true;
 
-    @Expose
-    @SerializedName("Durability_display_size")
-    public String DurSize = "small";
-
-    /**what should be displayed
+    /**what size the font needs to be
      *
      * possibilities:
-     *  1 = remaining uses
-     *  2 = percentage
+     * 0 = small
+     * 1 = large
+     **/
+    @Expose
+    @SerializedName("Durability_display_size")
+    public int DurSize = 0;
+
+    /**how the durability should be displayed
+     *
+     * possibilities:
+     *  0 = remaining uses
+     *  1 = percentage
      **/
     @Expose
     @SerializedName("Durability_text_mode")
-    public int DurMode = 1;
+    public int DurMode = 0;
 
     @Expose
     @SerializedName("Static_Colouring")
@@ -152,7 +157,7 @@ public class LiteModDurabilityViewer implements LiteMod, Configurable //TODO add
 
     public void writeConfig()
     {
-        LiteLoader.getInstance().writeConfig(this);
+        if ((DurMode == 0 || DurMode == 1) && (DurSize == 1 || DurSize == 2)) LiteLoader.getInstance().writeConfig(this);
     }
 
     //Not used

@@ -2,7 +2,6 @@ package com.fallingdutchman.DurabilityViewer.Renderer;
 
 import com.fallingdutchman.DurabilityViewer.LiteModDurabilityViewer;
 import com.fallingdutchman.DurabilityViewer.Utils.ColourUtils;
-import com.mumfrey.liteloader.util.log.LiteLoaderLogger;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.item.Item;
@@ -20,14 +19,16 @@ public class StringRenderer
         GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glDisable(GL11.GL_DEPTH_TEST);
         GL11.glScalef(
-                (LiteModDurabilityViewer.instance.DurSize.equals("small") ? 0.5F : 1.0F ),
-                (LiteModDurabilityViewer.instance.DurSize.equals("small") ? 0.5F : 1.0F ),
-                (LiteModDurabilityViewer.instance.DurSize.equals("small") ? 0.5F : 1.0F ));
-        Fr.drawStringWithShadow(DurText(Item), (x + 8) * 2 + 1 + Stringwidth / 2 - Stringwidth, (y + 11) * 2, ColourUtils.DurColour(Item));
+                (SmallFont() ? 0.5F : 1F),
+                (SmallFont() ? 0.5F : 1F),
+                (SmallFont() ? 0.5F : 1F));
+        Fr.drawStringWithShadow(DurText(Item),
+                SmallFont() ? ((x + 8) * 2 + 1 + Stringwidth / 2 - Stringwidth) : x + 8 - Stringwidth / 2,
+                ((SmallFont() ? (y + 11) * 2 : y + 9)), ColourUtils.DurColour(Item));
         GL11.glScalef(
-                (LiteModDurabilityViewer.instance.DurSize.equals("small") ? 2.0F : 1.0F ),
-                (LiteModDurabilityViewer.instance.DurSize.equals("small") ? 2.0F : 1.0F ),
-                (LiteModDurabilityViewer.instance.DurSize.equals("small") ? 2.0F : 1.0F ));
+                (SmallFont() ? 2.0F : 1F),
+                (SmallFont() ? 2.0F : 1F),
+                (SmallFont() ? 2.0F : 1F));
         GL11.glEnable(GL11.GL_LIGHTING);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
     }
@@ -62,20 +63,25 @@ public class StringRenderer
     private static String DurText(ItemStack item)
     {
         String Text;
-        if (LiteModDurabilityViewer.instance.DurMode == 1)
+        if (LiteModDurabilityViewer.instance.DurMode == 0)
         {
             Text = Integer.toString(item.getMaxDamage() - item.getItemDamage() + 1);
         }
-        else if (LiteModDurabilityViewer.instance.DurMode == 2)
+        else if (LiteModDurabilityViewer.instance.DurMode == 1)
         {
             Text = Integer.toString((int) (((float)item.getMaxDamage() - (float) item.getItemDamage() + 1.0F) / (float)item.getMaxDamage() * 100.0F)) + "%";
         }
         else
         {
-            LiteModDurabilityViewer.instance.DurMode = 1;
+            LiteModDurabilityViewer.instance.DurMode = 0;
             Text = Integer.toString(item.getMaxDamage() - item.getItemDamage() + 1);
         }
 
         return Text;
+    }
+
+    private static boolean SmallFont()
+    {
+        return LiteModDurabilityViewer.instance.DurSize == 0 || LiteModDurabilityViewer.instance.DurSize != 1;
     }
 }
