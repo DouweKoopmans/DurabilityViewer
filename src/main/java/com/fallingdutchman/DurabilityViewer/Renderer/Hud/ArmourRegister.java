@@ -1,10 +1,9 @@
 package com.fallingdutchman.DurabilityViewer.Renderer.Hud;
 
-import com.fallingdutchman.DurabilityViewer.Utils.ArmourKind;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.item.ItemStack;
+import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,30 +11,34 @@ import java.util.List;
 
 public class ArmourRegister
 {
-    private ItemStack[] Armour;
-    private Minecraft mc;
-    private FontRenderer fr;
     private List<ArmourSlot> ArmourSlots = new ArrayList<ArmourSlot>();
-    private RenderItem itemRenderer;
-
-    public ArmourRegister(ItemStack[] Armour, Minecraft mc, RenderItem itemRenderer)
+    public ArmourRegister(ItemStack[] Armour, Minecraft mc)
     {
-        this.Armour = Armour;
-        this.mc = mc;
-        this.fr = mc.fontRenderer;
-        this.itemRenderer = itemRenderer;
+        FontRenderer fr = mc.fontRenderer;
 
-        for (int i = 0; i<  this.Armour.length; i++)
+        for (ItemStack aArmour : Armour)
         {
-            ArmourSlots.add(new ArmourSlot(this.mc, this.fr,this.Armour[i], ArmourKind.values()[i]));
+            if (aArmour != null)
+            {
+                ArmourSlots.add(new ArmourSlot(mc, fr, aArmour));
+            }
         }
     }
 
-    public void Render(int width, int height)
+    public void Render(int width)
     {
-        for (ArmourSlot slot : ArmourSlots)
+        for (int i = 0; i < ArmourSlots.size(); i++)
         {
-            slot.Render(width, this.itemRenderer);
+            GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+            ArmourSlots.get(i).Render(xPos(width,i));
+            GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
         }
+    }
+
+    private int xPos(int width, int Iteration)
+    {
+        final int OFFSET = 16;
+        int WidthOffset = width / 2 + (ArmourSlots.size() * OFFSET) / 2;
+        return WidthOffset - OFFSET * ++Iteration;
     }
 }

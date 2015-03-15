@@ -11,7 +11,6 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.mumfrey.liteloader.Configurable;
 import com.mumfrey.liteloader.HUDRenderListener;
-import com.mumfrey.liteloader.JoinGameListener;
 import com.mumfrey.liteloader.LiteMod;
 import com.mumfrey.liteloader.core.LiteLoader;
 import com.mumfrey.liteloader.modconfig.ConfigPanel;
@@ -21,19 +20,18 @@ import com.mumfrey.liteloader.transformers.event.EventInfo;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import net.minecraft.network.INetHandler;
-import net.minecraft.network.play.server.S01PacketJoinGame;
 import org.lwjgl.opengl.GL11;
 
 import java.io.File;
 
 @ExposableOptions(strategy = ConfigStrategy.Unversioned, filename = "DurabilityViewer.config.json")
-public class LiteModDurabilityViewer implements LiteMod, Configurable, HUDRenderListener, JoinGameListener
+public class LiteModDurabilityViewer implements LiteMod, Configurable, HUDRenderListener
 {
     //configurations
     @Expose
@@ -89,6 +87,7 @@ public class LiteModDurabilityViewer implements LiteMod, Configurable, HUDRender
     public static LiteModDurabilityViewer instance;
     private Minecraft mc;
     private ArmourRegister AR;
+    public static RenderItem itemRenderer = new RenderItem();
 
     public LiteModDurabilityViewer() {
         if (instance != null) {
@@ -158,17 +157,16 @@ public class LiteModDurabilityViewer implements LiteMod, Configurable, HUDRender
     }
 
     @Override
-    public void onJoinGame(INetHandler netHandler, S01PacketJoinGame joinGamePacket)
-    {
-        ItemStack[] ArmourSlots = mc.thePlayer.inventory.armorInventory;
-        RenderItem ItemRenderer = new RenderItem();
-        AR = new ArmourRegister(ArmourSlots, this.mc, ItemRenderer);
-    }
-
-    @Override
     public void onPostRenderHUD(int screenWidth, int screenHeight)
     {
-        AR.Render(screenWidth,screenHeight);
+        AR = new ArmourRegister(mc.thePlayer.inventory.armorInventory, this.mc);
+
+        if (this.mc.inGameHasFocus || mc.currentScreen == null || mc.currentScreen instanceof GuiChat && !mc.gameSettings.showDebugInfo)
+        {
+            GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+            AR.Render(screenWidth);
+            GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+        }
     }
 
     @Override
