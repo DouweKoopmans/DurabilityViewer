@@ -1,12 +1,13 @@
-package com.fallingdutchman.DurabilityViewer.Gui;
+package com.fallingdutchman.DurabilityViewer.Handlers;
 
+import com.fallingdutchman.DurabilityViewer.Gui.GuiRadioButton;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class GuiRadioController
+public class GuiRadioHandler
 {
     private GuiRadioButton[] Buttons;
     private int Settings;
@@ -19,7 +20,7 @@ public class GuiRadioController
     private int line ;
 
 
-    public GuiRadioController(Minecraft minecraft,FontRenderer fr, String[] DisplayStrings,int id,int xPos ,int line, String Label ,int Settings, boolean enabled)
+    public GuiRadioHandler(Minecraft minecraft, FontRenderer fr, String[] DisplayStrings, int id, int xPos, int line, String Label, int Settings, boolean enabled)
     {
         this.Settings = Settings;
         this.Label = Label;

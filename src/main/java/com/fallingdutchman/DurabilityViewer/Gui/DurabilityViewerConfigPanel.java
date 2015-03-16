@@ -1,6 +1,7 @@
 package com.fallingdutchman.DurabilityViewer.Gui;
 
 import com.fallingdutchman.DurabilityViewer.Gui.ColourPicker.GuiControl;
+import com.fallingdutchman.DurabilityViewer.Handlers.GuiRadioHandler;
 import com.fallingdutchman.DurabilityViewer.LiteModDurabilityViewer;
 
 import com.fallingdutchman.DurabilityViewer.Utils.ColourUtils;
@@ -24,10 +25,10 @@ public class DurabilityViewerConfigPanel extends Gui implements ConfigPanel
     private List<Object> GuiButtons = new ArrayList<Object>();
 
     //class refrences
-    private GuiColourConfigLine StaticColour, ArrowColour;
-    private GuiCheckbox DurbarBox, DurStringBox;
-    private GuiRadioController DurModeRadioControler;
-    private GuiRadioController DurSizeRadioControler;
+    private GuiColourConfigLine ContStaticColour, ArrowColour, ArmourStaticColour;
+    private GuiCheckbox ContDurbarBox, ContDurStringBox, ArmourDurbarBox, ArmourDurStringBox;
+    private GuiRadioHandler ContDurModeRadioControler, ArmourDurModeRadioControler;
+    private GuiRadioHandler DurSizeRadioControler;
     private LiteModDurabilityViewer mod;
     private Minecraft mc;
     private FontRenderer fr;
@@ -72,34 +73,50 @@ public class DurabilityViewerConfigPanel extends Gui implements ConfigPanel
         this.GuiButtons.clear();
         this.ColouredConfigLines.clear();
 
-        GuiButtons.add(DurStringBox = new GuiCheckbox(id++, RANK_ONE, SPACING * line++, "Draw durability string"));
+        GuiButtons.add(ContDurStringBox = new GuiCheckbox(id++, RANK_ONE, SPACING * line++, "Draw durability string"));
 
-        String[] DurModeStrings = {"Normal number", "Percentual value"};
-        DurModeRadioControler = new GuiRadioController(this.mc, this.fr, DurModeStrings ,id++, RANK_TWO, line++, "Display the current durability as a", LiteModDurabilityViewer.instance.DurMode, LiteModDurabilityViewer.instance.RDurString);
-        line = line + DurModeStrings.length;
+        String[] ContDurModeStrings = {"Normal number", "Percentual value"};
+        ContDurModeRadioControler = new GuiRadioHandler(this.mc, this.fr, ContDurModeStrings ,id++, RANK_TWO, line++, "Display the current durability as a", LiteModDurabilityViewer.instance.DurMode[0], LiteModDurabilityViewer.instance.RDurString);
+        line = line + ContDurModeStrings.length;
 
         String[] DurSizeStrings = {"Display a small font", "Display a large font (disables durability bar)"};
-        DurSizeRadioControler = new GuiRadioController(this.mc, this.fr, DurSizeStrings,id++, RANK_TWO, line++, "Size of the displayed font", LiteModDurabilityViewer.instance.DurSize, LiteModDurabilityViewer.instance.RDurString);
+        DurSizeRadioControler = new GuiRadioHandler(this.mc, this.fr, DurSizeStrings,id++, RANK_TWO, line++, "Size of the displayed font", LiteModDurabilityViewer.instance.DurSize, LiteModDurabilityViewer.instance.RDurString);
         line = line + DurSizeStrings.length;
 
-        ColouredConfigLines.add(StaticColour = new GuiColourConfigLine(this.mc, id++, RANK_TWO, SPACING * line++, "Use static colour",
-                ColourUtils.RGBConverter(LiteModDurabilityViewer.instance.DurColour).getRGB(),
-                LiteModDurabilityViewer.instance.StaticColour,
+        ColouredConfigLines.add(ContStaticColour = new GuiColourConfigLine(this.mc, id++, RANK_TWO, SPACING * line++, "Use static colour",
+                ColourUtils.RGBConverter(LiteModDurabilityViewer.instance.ContDurColour).getRGB(),
+                LiteModDurabilityViewer.instance.ContStaticColour,
                 LiteModDurabilityViewer.instance.RDurString));
 
-        GuiButtons.add(DurbarBox = new GuiCheckbox(id++, RANK_ONE, SPACING * line++, "Draw the default durability bar as well"));
+        GuiButtons.add(ContDurbarBox = new GuiCheckbox(id++, RANK_TWO, SPACING * line++, "Draw the vanilla durabilitybar on top of the item texture"));
         ColouredConfigLines.add(ArrowColour = new GuiColourConfigLine(this.mc, id++, RANK_ONE, SPACING * line++, "Display arrowcount in the hud",
                 ColourUtils.RGBConverter(LiteModDurabilityViewer.instance.ArrowColour).getRGB(),
                 LiteModDurabilityViewer.instance.ArrowCount,
                 true));
 
-        GuiButtons.addAll(ColouredConfigLines);
-        GuiButtons.addAll(DurModeRadioControler.getButtons());
-        GuiButtons.addAll(DurSizeRadioControler.getButtons());
+        GuiButtons.add(ArmourDurStringBox = new GuiCheckbox(id++, RANK_ONE, SPACING * line++, "Draw your armour-status on the hud"));
 
-        DurStringBox.checked = LiteModDurabilityViewer.instance.RDurString;
-        DurbarBox.checked = LiteModDurabilityViewer.instance.RDurBar && DurSizeRadioControler.getSettings() == 0;
-        DurbarBox.enabled = LiteModDurabilityViewer.instance.DurSize == 0;
+        String[] ArmourDurModeStrings = {"Normal number", "Percentual value"};
+        ArmourDurModeRadioControler = new GuiRadioHandler(this.mc, this.fr, ArmourDurModeStrings, id++, RANK_TWO, line++, "Display current armour durability as a", LiteModDurabilityViewer.instance.DurMode[1], LiteModDurabilityViewer.instance.RADur);
+        line = line + ArmourDurModeStrings.length;
+
+        ColouredConfigLines.add(ArmourStaticColour = new GuiColourConfigLine(this.mc, id++, RANK_TWO, SPACING * line++, "Use a static colour",
+                ColourUtils.RGBConverter(LiteModDurabilityViewer.instance.ArmourDurColour).getRGB(),
+                LiteModDurabilityViewer.instance.ArmourStaticColour,
+                LiteModDurabilityViewer.instance.RADur));
+
+        GuiButtons.add(ArmourDurbarBox = new GuiCheckbox(id++, RANK_TWO, SPACING * line++, "Draw the vanilla durabilitybar on top of the armour pieces on armourhud"));
+
+        GuiButtons.addAll(ColouredConfigLines);
+        GuiButtons.addAll(ContDurModeRadioControler.getButtons());
+        GuiButtons.addAll(DurSizeRadioControler.getButtons());
+        GuiButtons.addAll(ArmourDurModeRadioControler.getButtons());
+
+        ArmourDurStringBox.checked = LiteModDurabilityViewer.instance.RADur;
+        ArmourDurbarBox.checked = LiteModDurabilityViewer.instance.RADurBar;
+        ContDurStringBox.checked = LiteModDurabilityViewer.instance.RDurString;
+        ContDurbarBox.checked = LiteModDurabilityViewer.instance.RCDurBar && DurSizeRadioControler.getSettings() == 0;
+        ContDurbarBox.enabled = LiteModDurabilityViewer.instance.DurSize == 0;
     }
 
     @Override
@@ -112,12 +129,17 @@ public class DurabilityViewerConfigPanel extends Gui implements ConfigPanel
     @Override
     public void onPanelHidden()
     {
-        LiteModDurabilityViewer.instance.StaticColour = StaticColour.getChecked() && LiteModDurabilityViewer.instance.RDurString;
-        LiteModDurabilityViewer.instance.DurColour = ColourUtils.CurrentRGB(StaticColour.getColour());
+        LiteModDurabilityViewer.instance.ContStaticColour = ContStaticColour.getChecked() && LiteModDurabilityViewer.instance.RDurString;
+        LiteModDurabilityViewer.instance.ArmourStaticColour = ArmourStaticColour.getChecked() && LiteModDurabilityViewer.instance.RADur;
+        LiteModDurabilityViewer.instance.ContDurColour = ColourUtils.CurrentRGB(ContStaticColour.getColour());
+        LiteModDurabilityViewer.instance.ArmourDurColour = ColourUtils.CurrentRGB(ArmourStaticColour.getColour());
         LiteModDurabilityViewer.instance.ArrowCount = ArrowColour.getChecked();
         LiteModDurabilityViewer.instance.ArrowColour = ColourUtils.CurrentRGB(ArrowColour.getColour());
-        LiteModDurabilityViewer.instance.DurMode = DurModeRadioControler.getSettings();
+        LiteModDurabilityViewer.instance.DurMode[0] = ContDurModeRadioControler.getSettings();
+        LiteModDurabilityViewer.instance.DurMode[1] = ArmourDurModeRadioControler.getSettings();
         LiteModDurabilityViewer.instance.DurSize = DurSizeRadioControler.getSettings();
+
+        LiteModDurabilityViewer.instance.UpdateRenderHandler();
 
         mod.writeConfig();
     }
@@ -139,7 +161,8 @@ public class DurabilityViewerConfigPanel extends Gui implements ConfigPanel
             }
         }
         DurSizeRadioControler.Draw(mouseX,mouseY);
-        DurModeRadioControler.Draw(mouseX,mouseY);
+        ContDurModeRadioControler.Draw(mouseX, mouseY);
+        ArmourDurModeRadioControler.Draw(mouseX, mouseY);
         for (GuiColourConfigLine line : ColouredConfigLines)
         {
             line.drawPicker(mouseX, mouseY);
@@ -158,32 +181,45 @@ public class DurabilityViewerConfigPanel extends Gui implements ConfigPanel
                 {
                     activeButton = (GuiButton) button;
 
-                    if (button.equals(DurbarBox))
+                    if (button.equals(ContDurbarBox))
                     {
-                        LiteModDurabilityViewer.instance.RDurBar = !LiteModDurabilityViewer.instance.RDurBar;
-                        DurbarBox.checked = LiteModDurabilityViewer.instance.RDurBar;
-                    } else if (button.equals(DurStringBox))
+                        LiteModDurabilityViewer.instance.RCDurBar = !LiteModDurabilityViewer.instance.RCDurBar;
+                        ContDurbarBox.checked = LiteModDurabilityViewer.instance.RCDurBar;
+                    } else if (button.equals(ContDurStringBox))
                     {
                         LiteModDurabilityViewer.instance.RDurString = !LiteModDurabilityViewer.instance.RDurString;
-                        DurStringBox.checked = LiteModDurabilityViewer.instance.RDurString;
+                        ContDurStringBox.checked = LiteModDurabilityViewer.instance.RDurString;
 
-                        DurModeRadioControler.Refresh(LiteModDurabilityViewer.instance.RDurString);
+                        ContDurModeRadioControler.Refresh(LiteModDurabilityViewer.instance.RDurString);
                         DurSizeRadioControler.Refresh(LiteModDurabilityViewer.instance.RDurString);
                         //refresh the coloured buttons.
-                        StaticColour.refresh(LiteModDurabilityViewer.instance.RDurString);
+                        ContStaticColour.refresh(LiteModDurabilityViewer.instance.RDurString);
                     } else if (button instanceof GuiRadioButton)
                     {
-                        if (DurModeRadioControler.getButtons().contains(button))
+                        if (ContDurModeRadioControler.getButtons().contains(button))
                         {
-                            DurModeRadioControler.mousePressed((GuiRadioButton)button);
-                        }
-                        else if (DurSizeRadioControler.getButtons().contains(button))
+                            ContDurModeRadioControler.mousePressed((GuiRadioButton)button);
+                        } else if (DurSizeRadioControler.getButtons().contains(button))
                         {
                             DurSizeRadioControler.mousePressed((GuiRadioButton) button);
 
-                            DurbarBox.enabled = DurStringBox.checked && DurSizeRadioControler.getSettings() == 0;
-                            DurbarBox.checked = LiteModDurabilityViewer.instance.RDurBar = DurSizeRadioControler.getSettings() == 0;
+                            ContDurbarBox.enabled = ContDurStringBox.checked && DurSizeRadioControler.getSettings() == 0;
+                            ContDurbarBox.checked = LiteModDurabilityViewer.instance.RCDurBar = DurSizeRadioControler.getSettings() == 0;
+                        } else if (ArmourDurModeRadioControler.getButtons().contains(button))
+                        {
+                            ArmourDurModeRadioControler.mousePressed((GuiRadioButton) button);
                         }
+                    } else if (button.equals(ArmourDurbarBox))
+                    {
+                        LiteModDurabilityViewer.instance.RADurBar = !LiteModDurabilityViewer.instance.RADurBar;
+                        ArmourDurbarBox.checked = LiteModDurabilityViewer.instance.RADurBar;
+                    } else if (button.equals(ArmourDurStringBox))
+                    {
+                        LiteModDurabilityViewer.instance.RADur = !LiteModDurabilityViewer.instance.RADur;
+                        ArmourDurStringBox.checked = LiteModDurabilityViewer.instance.RADur;
+
+                        ArmourDurModeRadioControler.Refresh(LiteModDurabilityViewer.instance.RADur);
+                        ArmourStaticColour.refresh(LiteModDurabilityViewer.instance.RADur);
                     }
                 }
             } else if (button instanceof GuiColourConfigLine)

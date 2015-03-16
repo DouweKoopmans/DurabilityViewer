@@ -1,9 +1,8 @@
 package com.fallingdutchman.DurabilityViewer;
 
 import com.fallingdutchman.DurabilityViewer.Gui.DurabilityViewerConfigPanel;
-import com.fallingdutchman.DurabilityViewer.Renderer.BarRenderer;
-import com.fallingdutchman.DurabilityViewer.Renderer.Hud.ArmourRegister;
-import com.fallingdutchman.DurabilityViewer.Renderer.StringRenderer;
+import com.fallingdutchman.DurabilityViewer.Handlers.RenderHandler;
+import com.fallingdutchman.DurabilityViewer.Handlers.ArmourSlotsHandler;
 import com.fallingdutchman.DurabilityViewer.Utils.DvUtils;
 import com.fallingdutchman.DurabilityViewer.Utils.references;
 
@@ -35,15 +34,19 @@ public class LiteModDurabilityViewer implements LiteMod, Configurable, HUDRender
 {
     //configurations
     @Expose
-    @SerializedName("Durability_bar")
-    public boolean RDurBar = true;
+    @SerializedName("Container_Durability_bar")
+    public boolean RCDurBar = true;
 
     @Expose
-    @SerializedName("Armor_durability")
+    @SerializedName("Armour_Durability_bar")
+    public boolean RADurBar = true;
+
+    @Expose
+    @SerializedName("Draw_Armour_durability")
     public boolean RADur = true;
 
     @Expose
-    @SerializedName("Draw_durability_string")
+    @SerializedName("Draw_Container_durability_string")
     public boolean RDurString = true;
 
     /**what size the font needs to be
@@ -61,18 +64,28 @@ public class LiteModDurabilityViewer implements LiteMod, Configurable, HUDRender
      * possibilities:
      *  0 = remaining uses
      *  1 = percentage
+     *
+     *  the array entry 1 is for container renders, entry 2 is for the armour-hud
      **/
     @Expose
     @SerializedName("Durability_text_mode")
-    public int DurMode = 0;
+    public int DurMode[] = {0, 0};
 
     @Expose
-    @SerializedName("Static_Colouring")
-    public boolean StaticColour = false;
+    @SerializedName("Container_Static_Colouring")
+    public boolean ContStaticColour = false;
 
     @Expose
-    @SerializedName("Static_Colour")
-    public int[] DurColour = new int[3];
+    @SerializedName("Armour_Static_Colouring")
+    public boolean ArmourStaticColour = false;
+
+    @Expose
+    @SerializedName("Container_Static_Colour")
+    public int[] ContDurColour = new int[3];
+
+    @Expose
+    @SerializedName("Armour_Static_Colour")
+    public int[] ArmourDurColour = new int[3];
 
     @Expose
     @SerializedName("Arrow_Count")
@@ -86,7 +99,7 @@ public class LiteModDurabilityViewer implements LiteMod, Configurable, HUDRender
     //actual class methods
     public static LiteModDurabilityViewer instance;
     private Minecraft mc;
-    private ArmourRegister AR;
+    private RenderHandler ContRh, ArmourRh;
     public static RenderItem itemRenderer = new RenderItem();
 
     public LiteModDurabilityViewer() {
@@ -140,18 +153,18 @@ public class LiteModDurabilityViewer implements LiteMod, Configurable, HUDRender
                 //draw string
                 if (instance.RDurString)
                 {
-                    StringRenderer.RenderDura(arg1, arg3, arg4, arg5);
+                    instance.ContRh.RenderDuraString(arg1, arg3, arg4, arg5);
                 }
                 //draw bar
-                if (instance.RDurBar)
+                if (instance.RCDurBar)
                 {
-                    BarRenderer.Render(arg3, arg4, arg5);
+                    instance.ContRh.RenderDuraBar(arg3, arg4, arg5);
                 }
             }
             //checks if the current itemstack is a bow item
             if (instance.ArrowCount && arg3.getItem().equals(Item.getItemById(261)) && DvUtils.inInv(arg3))
             {
-                StringRenderer.RenderArrowCount(arg1, arg4, arg5);
+                instance.ContRh.RenderArrowCount(arg1, arg4, arg5);
             }
         }
     }
@@ -159,12 +172,12 @@ public class LiteModDurabilityViewer implements LiteMod, Configurable, HUDRender
     @Override
     public void onPostRenderHUD(int screenWidth, int screenHeight)
     {
-        AR = new ArmourRegister(mc.thePlayer.inventory.armorInventory, this.mc);
+        ArmourSlotsHandler AR = new ArmourSlotsHandler(mc.thePlayer.inventory.armorInventory, this.mc, instance.RADurBar);
 
-        if (this.mc.inGameHasFocus || mc.currentScreen == null || mc.currentScreen instanceof GuiChat && !mc.gameSettings.showDebugInfo)
+        if (this.mc.inGameHasFocus || mc.currentScreen == null || mc.currentScreen instanceof GuiChat && !mc.gameSettings.showDebugInfo && instance.RADur)
         {
             GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-            AR.Render(screenWidth);
+            AR.Render(screenWidth, this.ArmourRh);
             GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
         }
     }
@@ -177,13 +190,22 @@ public class LiteModDurabilityViewer implements LiteMod, Configurable, HUDRender
 
     public void writeConfig()
     {
-        if ((DurMode == 0 || DurMode == 1) && (DurSize == 1 || DurSize == 2)) LiteLoader.getInstance().writeConfig(this);
+        LiteLoader.getInstance().writeConfig(this);
+    }
+
+    @Override
+    public void init(File configPath)
+    {
+        UpdateRenderHandler();
+    }
+
+    public void UpdateRenderHandler()
+    {
+        ContRh = new RenderHandler(RenderHandler.RENDER_TYPE.CONTAINER);
+        ArmourRh = new RenderHandler(RenderHandler.RENDER_TYPE.ARMOURSTATUS);
     }
 
     //Not used
-    @Override
-    public void init(File configPath){}
-
     @Override
     public void upgradeSettings(String version, File configPath, File oldConfigPath){}
 

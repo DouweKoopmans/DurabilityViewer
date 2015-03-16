@@ -1,6 +1,5 @@
 package com.fallingdutchman.DurabilityViewer.Utils;
 
-import com.fallingdutchman.DurabilityViewer.LiteModDurabilityViewer;
 import net.minecraft.item.ItemStack;
 
 import java.awt.*;
@@ -39,9 +38,9 @@ public class ColourUtils
     }
 
 
-    public static int DurColour(ItemStack item)
+    public static int DurColour(ItemStack item, int[] RgbArray, boolean Static)
     {
-        if (!LiteModDurabilityViewer.instance.StaticColour)
+        if (!Static)
         {
             int[] rgb = new int[3];
             int currentDura = item.getMaxDamage() - item.getItemDamage() + 1;
@@ -53,7 +52,7 @@ public class ColourUtils
 
             return RGBConverter(rgb).getRGB();
         }
-        return RGBConverter(LiteModDurabilityViewer.instance.DurColour).getRGB();
+        return RGBConverter(RgbArray).getRGB();
     }
 
     private static int Delta(int Old, int New)

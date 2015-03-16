@@ -1,5 +1,6 @@
-package com.fallingdutchman.DurabilityViewer.Renderer.Hud;
+package com.fallingdutchman.DurabilityViewer.Handlers;
 
+import com.fallingdutchman.DurabilityViewer.Renderer.Hud.ArmourSlot;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.item.ItemStack;
@@ -9,10 +10,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ArmourRegister
+public class ArmourSlotsHandler
 {
     private List<ArmourSlot> ArmourSlots = new ArrayList<ArmourSlot>();
-    public ArmourRegister(ItemStack[] Armour, Minecraft mc)
+    private boolean RenderBar;
+
+    public ArmourSlotsHandler(ItemStack[] Armour, Minecraft mc, boolean RenderBar)
     {
         FontRenderer fr = mc.fontRenderer;
 
@@ -23,14 +26,16 @@ public class ArmourRegister
                 ArmourSlots.add(new ArmourSlot(mc, fr, aArmour));
             }
         }
+
+        this.RenderBar = RenderBar;
     }
 
-    public void Render(int width)
+    public void Render(int width, RenderHandler armourRh)
     {
         for (int i = 0; i < ArmourSlots.size(); i++)
         {
             GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-            ArmourSlots.get(i).Render(xPos(width,i));
+            ArmourSlots.get(i).Render(xPos(width,i), armourRh, RenderBar);
             GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
         }
     }
