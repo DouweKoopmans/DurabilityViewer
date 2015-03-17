@@ -21,10 +21,8 @@ public class ArmourSlot
         this.Item = item;
     }
 
-    public void Render(int xPos, RenderHandler armourRh, boolean RenderBar)
+    public void Render(int xPos,int yPos, RenderHandler armourRh, boolean RenderBar)
     {
-        int yPos = 17;
-
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         GL11.glEnable(32826);
         RenderHelper.disableStandardItemLighting();
