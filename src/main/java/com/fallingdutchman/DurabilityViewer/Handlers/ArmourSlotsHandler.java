@@ -18,13 +18,13 @@ public class ArmourSlotsHandler
 
     public ArmourSlotsHandler(ItemStack[] Armour, Minecraft mc, boolean RenderBar)
     {
-        FontRenderer fr = mc.fontRenderer;
+        FontRenderer fr = mc.fontRendererObj;
 
         for (ItemStack aArmour : Armour)
         {
             if (aArmour != null)
             {
-                ArmourSlots.add(new ArmourSlot(mc, fr, aArmour));
+                ArmourSlots.add(new ArmourSlot(fr, aArmour));
             }
         }
 

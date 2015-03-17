@@ -17,7 +17,7 @@ public class GuiColouredButton extends GuiControl
         super(minecraft, controlId, xPos, yPos, controlWidth, controlHeight,displayText);
         this.colour = colour;
         this.displayText = displayText;
-        this.fr = Minecraft.getMinecraft().fontRenderer;
+        this.fr = Minecraft.getMinecraft().fontRendererObj;
     }
 
     public int getColour()
@@ -46,7 +46,7 @@ public class GuiColouredButton extends GuiControl
 
             if (this.displayString != null && this.displayString.length() > 0)
             {
-                this.drawString(minecraft.fontRenderer, this.displayString, this.xPosition + this.width + 8, this.yPosition + (this.height - 8) / 2, StringColour);
+                this.drawString(minecraft.fontRendererObj, this.displayString, this.xPosition + this.width + 8, this.yPosition + (this.height - 8) / 2, StringColour);
             }
         }
     }

@@ -20,11 +20,14 @@ import com.mumfrey.liteloader.transformers.event.EventInfo;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiChat;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.client.resources.model.ModelManager;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import net.minecraft.util.EnumChatFormatting;
 import org.lwjgl.opengl.GL11;
 
 import java.io.File;
@@ -100,7 +103,7 @@ public class LiteModDurabilityViewer implements LiteMod, Configurable, HUDRender
     public static LiteModDurabilityViewer instance;
     private Minecraft mc;
     private RenderHandler ContRh, ArmourRh;
-    public static RenderItem itemRenderer = new RenderItem();
+    public static RenderItem itemRenderer;
 
     public LiteModDurabilityViewer() {
         if (instance != null) {
@@ -111,6 +114,7 @@ public class LiteModDurabilityViewer implements LiteMod, Configurable, HUDRender
             instance = this;
         }
         mc = Minecraft.getMinecraft();
+        itemRenderer =  mc.getRenderItem();
     }
 
     @Override
@@ -128,43 +132,49 @@ public class LiteModDurabilityViewer implements LiteMod, Configurable, HUDRender
     /**
      * called by the EventInjectionTransformer {@link com.fallingdutchman.DurabilityViewer.Transformer.DurabilityViewerTransformer}
      * @param e EventInfo
-     * @param arg1 Reference to the FontRenderer Class
-     * @param arg2 Reference to the textturemanger class
-     * @param arg3 Reference to the ItemStack
-     * @param arg4 x
-     * @param arg5 y
-     * @param arg6
+     * @param fontRenderer Reference to the FontRenderer
+     * @param stack Reference to the ItemStack
+     * @param xPos x
+     * @param yPos y
+     * @param Text text to be drawn on the Gui
      */
-    public static void OnRenderItemOverlay(EventInfo<RenderItem> e, FontRenderer arg1, TextureManager arg2, ItemStack arg3, int arg4, int arg5, String arg6)
+    public static void OnRenderItemOverlay(EventInfo<RenderItem> e, FontRenderer fontRenderer, ItemStack stack, int xPos, int yPos, String Text)
     {
         e.cancel();
-        if (arg3 != null)
+        if (stack != null)
         {
-            if (arg3.stackSize > 1 || arg6 != null)
+            if (stack.stackSize > 1 || Text != null)
             {
-                String var7 = arg6 == null ? String.valueOf(arg3.stackSize) : arg6;
-                GL11.glDisable(GL11.GL_LIGHTING);
-                GL11.glDisable(GL11.GL_DEPTH_TEST);
-                arg1.drawStringWithShadow(var7, arg4 + 19 - 2 - arg1.getStringWidth(var7), arg5 + 6 + 3, 16777215);
-                GL11.glEnable(GL11.GL_LIGHTING);
-                GL11.glEnable(GL11.GL_DEPTH_TEST);
-            } else if (arg3.isItemDamaged())
+                String var6 = Text == null ? String.valueOf(stack.stackSize) : Text;
+
+            if (Text == null && stack.stackSize < 1)
+            {
+                var6 = EnumChatFormatting.RED + String.valueOf(stack.stackSize);
+            }
+
+            GlStateManager.disableLighting();
+            GlStateManager.disableDepth();
+            GlStateManager.disableBlend();
+            fontRenderer.drawStringWithShadow(var6, (float)(xPos + 19 - 2 - fontRenderer.getStringWidth(var6)), (float)(yPos + 6 + 3), 16777215);
+            GlStateManager.enableLighting();
+            GlStateManager.enableDepth();
+        } else if (stack.isItemDamaged())
             {
                 //draw string
                 if (instance.RDurString)
                 {
-                    instance.ContRh.RenderDuraString(arg1, arg3, arg4, arg5);
+                    instance.ContRh.RenderDuraString(fontRenderer, stack, xPos, yPos);
                 }
                 //draw bar
                 if (instance.RCDurBar)
                 {
-                    instance.ContRh.RenderDuraBar(arg3, arg4, arg5);
+                    instance.ContRh.RenderDuraBar(stack, xPos, yPos);
                 }
             }
             //checks if the current itemstack is a bow item
-            if (instance.ArrowCount && arg3.getItem().equals(Item.getItemById(261)) && DvUtils.inInv(arg3))
+            if (instance.ArrowCount && stack.getItem().equals(Item.getItemById(261)) && DvUtils.inInv(stack))
             {
-                instance.ContRh.RenderArrowCount(arg1, arg4, arg5);
+                instance.ContRh.RenderArrowCount(fontRenderer, xPos, yPos);
             }
         }
     }

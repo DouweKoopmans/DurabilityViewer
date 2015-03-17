@@ -16,19 +16,26 @@ buildscript {
     }
 }
 
-apply plugin: 'liteloader'
+apply plugin: 'forge'
 
 archivesBaseName = "DurabilityViewer"
+version = project.version
+ext.rev = "1"
 
 minecraft {
-    version = "1.7.10"
+    version = "1.8-recommended"
     runDir = "eclipse/assets"
     replace "@VERSION@", project.version
+    mappings = "stable_15"
     assetDir = "/src/main/resources/assets"
 }
 
 processResources
         {
+            inputs.property "version", project.version
+            inputs.property "mcversion", project.minecraft.version
+            inputs.property "revision", project.revision
+
             // replace stuff in mcmod.info, nothing else
             from(sourceSets.main.resources.srcDirs) {
                 include 'litemod.json'
@@ -42,3 +49,10 @@ processResources
                 exclude 'litemod.json'
             }
         }
+jar {
+    extension "litemod"
+}
+
+reobf {
+    setSrgMcp()
+}

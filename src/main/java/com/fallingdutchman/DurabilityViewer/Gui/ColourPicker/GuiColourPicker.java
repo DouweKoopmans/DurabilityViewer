@@ -32,10 +32,10 @@ public class GuiColourPicker extends GuiControl
         Color color = new Color(initialColor);
         this.hsb = Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), null);
 
-        this.fontRenderer = minecraft.fontRenderer;
-        this.txtRed = new GuiTextField(this.fontRenderer, this.xPosition + 163, this.yPosition + 10, 42, 16);
-        this.txtGreen = new GuiTextField(this.fontRenderer, this.xPosition + 163, this.yPosition + 30, 42, 16);
-        this.txtBlue = new GuiTextField(this.fontRenderer, this.xPosition + 163, this.yPosition + 50, 42, 16);
+        this.fontRenderer = minecraft.fontRendererObj;
+        this.txtRed = new GuiTextField(controlId++,this.fontRenderer, this.xPosition + 163, this.yPosition + 10, 42, 16);
+        this.txtGreen = new GuiTextField(controlId++,this.fontRenderer, this.xPosition + 163, this.yPosition + 30, 42, 16);
+        this.txtBlue = new GuiTextField(controlId++,this.fontRenderer, this.xPosition + 163, this.yPosition + 50, 42, 16);
 
         this.txtRed.setMaxStringLength(3);
         this.txtGreen.setMaxStringLength(3);

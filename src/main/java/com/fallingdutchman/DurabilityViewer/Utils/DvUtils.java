@@ -23,12 +23,12 @@ public class DvUtils
 
     public static void renderQuad(Tessellator tes, int x, int y, int width, float height, int arg6)
     {
-        tes.startDrawingQuads();
-        tes.setColorOpaque_I(arg6);
-        tes.addVertex((double)(x), (double)(y), 0.0D);
-        tes.addVertex((double)(x), (double)(y + height), 0.0D);
-        tes.addVertex((double)(x + width), (double)(y + height), 0.0D);
-        tes.addVertex((double)(x + width), (double)(y), 0.0D);
+        tes.getWorldRenderer().startDrawingQuads();
+        tes.getWorldRenderer().setColorOpaque_I(arg6);
+        tes.getWorldRenderer().addVertex((double) (x), (double) (y), 0.0D);
+        tes.getWorldRenderer().addVertex((double) (x), (double) (y + height), 0.0D);
+        tes.getWorldRenderer().addVertex((double) (x + width), (double) (y + height), 0.0D);
+        tes.getWorldRenderer().addVertex((double)(x + width), (double)(y), 0.0D);
         tes.draw();
     }
 

@@ -67,7 +67,7 @@ public class DurabilityRenderer
         GL11.glDisable(GL11.GL_TEXTURE_2D);
         GL11.glDisable(GL11.GL_ALPHA_TEST);
         GL11.glDisable(GL11.GL_BLEND);
-        Tessellator tes = Tessellator.instance;
+        Tessellator tes = Tessellator.getInstance();
         int var10 = 255 - var8 << 16 | var8 << 8;
         int var11 = (255 - var8) / 4 << 16 | 16128;
         DvUtils.renderQuad(tes, x + 2, y + (LiteModDurabilityViewer.instance.RDurString ? 15 : 13), 13, (LiteModDurabilityViewer.instance.RDurString ? 1.5f : 1.0f), 0);

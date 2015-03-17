@@ -10,14 +10,12 @@ import org.lwjgl.opengl.GL11;
 
 public class ArmourSlot
 {
-    private Minecraft mc;
     private FontRenderer fr;
     private ItemStack Item;
 
-    public ArmourSlot(Minecraft mc, FontRenderer fr, ItemStack item)
+    public ArmourSlot(FontRenderer Fr, ItemStack item)
     {
-        this.mc = mc;
-        this.fr = fr;
+        this.fr = Fr;
         this.Item = item;
     }
 
@@ -28,7 +26,7 @@ public class ArmourSlot
         RenderHelper.disableStandardItemLighting();
         RenderHelper.enableGUIStandardItemLighting();
 
-        LiteModDurabilityViewer.itemRenderer.renderItemAndEffectIntoGUI(this.fr, this.mc.getTextureManager(), this.Item, xPos, yPos);
+        LiteModDurabilityViewer.itemRenderer.renderItemAndEffectIntoGUI(this.Item, xPos, yPos);
         armourRh.RenderDuraString(this.fr, this.Item, xPos, yPos);
 
         if (RenderBar)

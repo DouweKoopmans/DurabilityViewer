@@ -18,7 +18,6 @@ public class DurabilityViewerTransformer extends EventInjectionTransformer
                 DurabilityViewerObfTable.renderItemOverlayIntoGUI ,
                 Void.TYPE,
                 DurabilityViewerObfTable.FontRenderer,
-                DurabilityViewerObfTable.TextureManager,
                 DurabilityViewerObfTable.ItemStack,
                 Integer.TYPE,
                 Integer.TYPE,

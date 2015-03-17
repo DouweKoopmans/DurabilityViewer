@@ -42,7 +42,7 @@ public class DurabilityViewerConfigPanel extends Gui implements ConfigPanel
     public DurabilityViewerConfigPanel()
     {
         mc = Minecraft.getMinecraft();
-        fr = mc.fontRenderer;
+        fr = mc.fontRendererObj;
     }
 
     @Override
@@ -234,7 +234,7 @@ public class DurabilityViewerConfigPanel extends Gui implements ConfigPanel
     {
         if (activeButton != null)
         {
-            activeButton.func_146111_b(mouseX, mouseY);
+            activeButton.mouseReleased(mouseX, mouseY);
             if (activeButton instanceof GuiControl)
             {
                 activeButton.mouseReleased(mouseX, mouseY);
