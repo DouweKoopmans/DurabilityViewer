@@ -15,7 +15,7 @@ import org.lwjgl.input.Keyboard;
 public class GuiColourPicker extends GuiControl
 {
     private FontRenderer fontRenderer;
-    public static final ResourceLocation COLOURPICKER_PICKER = new ResourceLocation("durabilityviewer", "textures/gui/picker.png");
+    private static final ResourceLocation COLOURPICKER_PICKER = new ResourceLocation("durabilityviewer", "textures/gui/picker.png");
     private static final int H = 0, S = 1, B = 2;
     private float[] hsb;
     private int rgb;
@@ -44,8 +44,8 @@ public class GuiColourPicker extends GuiControl
         this.rectHSArea = new Rectangle(this.xPosition + 10, this.yPosition + 10, 128, 128);
         this.rectBArea = new Rectangle(this.xPosition + 143, this.yPosition + 10, 15, 128);
 
-        this.btnOk = new GuiControl(minecraft, 0, this.xPosition + 9, this.yPosition + 145, 55, 20, "ok");
-        this.btnCancel = new GuiControl(minecraft, 1, this.xPosition + 70, this.yPosition + 145, 65, 20, "cancel");
+        this.btnOk = new GuiControl(minecraft, 0, this.xPosition + 9, this.yPosition + 145, 55, 20, "ok"); //TODO add support for .lang files
+        this.btnCancel = new GuiControl(minecraft, 1, this.xPosition + 70, this.yPosition + 145, 65, 20, "cancel");//TODO add support for .lang files
 
         this.updateColor();
     }
@@ -86,7 +86,7 @@ public class GuiColourPicker extends GuiControl
 
         // Draw brightness bar
         this.drawGradientRect(this.xPosition + 143, this.yPosition + 10, this.xPosition + 158,this.yPosition + 138, brightness, 0xFF000000);
-        this.drawRotText(this.fontRenderer, "Luminosity", this.xPosition + 150, this.yPosition + 74,0xFF000000, false);
+        this.drawRotText(this.fontRenderer, "Luminosity", this.xPosition + 150, this.yPosition + 74,0xFF000000, false); //TODO add support for .lang files
         drawRect(this.xPosition + 142, bPos - 1, this.xPosition + 159, bPos + 1, 0xFFFFFFFF);
 
         // Draw preview

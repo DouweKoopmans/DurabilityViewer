@@ -23,12 +23,12 @@ public class DurabilityViewerObfTable extends Obf
     public static DurabilityViewerObfTable ItemStack = new DurabilityViewerObfTable(IsSrgClass, IsObfClass);
     public static DurabilityViewerObfTable renderItemOverlayIntoGUI = new DurabilityViewerObfTable(SrgMethod, ObfMethod, McpMethod);
 
-    public DurabilityViewerObfTable(String seargeName, String obfName)
+    private DurabilityViewerObfTable(String seargeName, String obfName)
     {
         super(seargeName.replaceAll("/", "."), obfName.replaceAll("/", "."), seargeName.replaceAll("/", "."));
     }
 
-    public DurabilityViewerObfTable(String seargename, String obfName, String mcpName)
+    private DurabilityViewerObfTable(String seargename, String obfName, String mcpName)
     {
         super(seargename.replaceAll("/", "."), obfName.replaceAll("/", "."), mcpName.replaceAll("/", "."));
     }

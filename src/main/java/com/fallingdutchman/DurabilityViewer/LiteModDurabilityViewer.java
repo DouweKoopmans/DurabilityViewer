@@ -34,20 +34,20 @@ public class LiteModDurabilityViewer implements LiteMod, Configurable, HUDRender
 {
     //configurations
     @Expose
-    @SerializedName("Container_Durability_bar")
-    public boolean RCDurBar = true;
+    @SerializedName("Draw_Container_durability_string")
+    public boolean RDurString = true;
 
     @Expose
-    @SerializedName("Armour_Durability_bar")
-    public boolean RADurBar = true;
+    @SerializedName("Container_Durability_bar")
+    public boolean RCDurBar = true;
 
     @Expose
     @SerializedName("Draw_Armour_durability")
     public boolean RADur = true;
 
     @Expose
-    @SerializedName("Draw_Container_durability_string")
-    public boolean RDurString = true;
+    @SerializedName("Armour_Durability_bar")
+    public boolean RADurBar = true;
 
     /**what size the font needs to be
      *

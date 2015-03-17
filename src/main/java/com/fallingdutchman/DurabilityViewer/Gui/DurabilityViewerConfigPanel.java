@@ -16,23 +16,21 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.ScaledResolution;
 
 import java.util.*;
-import java.util.List;
 
 public class DurabilityViewerConfigPanel extends Gui implements ConfigPanel
 {
-    //maps and lists
+    //Button lists
     private List<GuiColourConfigLine> ColouredConfigLines = new ArrayList<GuiColourConfigLine>();
     private List<Object> GuiButtons = new ArrayList<Object>();
 
-    //class refrences
+    //class references
     private GuiColourConfigLine ContStaticColour, ArrowColour, ArmourStaticColour;
     private GuiCheckbox ContDurbarBox, ContDurStringBox, ArmourDurbarBox, ArmourDurStringBox;
-    private GuiRadioHandler ContDurModeRadioControler, ArmourDurModeRadioControler;
-    private GuiRadioHandler DurSizeRadioControler;
+    private GuiRadioHandler ContDurModeRadioControler, ArmourDurModeRadioControler, DurSizeRadioControler;
     private LiteModDurabilityViewer mod;
     private Minecraft mc;
     private FontRenderer fr;
-    public static GuiButton activeButton;
+    private static GuiButton activeButton;
 
     //constants
     private final static int SPACING = 16;
@@ -49,7 +47,7 @@ public class DurabilityViewerConfigPanel extends Gui implements ConfigPanel
     @Override
     public String getPanelTitle()
     {
-        return references.MOD_NAME + " options";
+        return references.MOD_NAME + " options"; //TODO: add support for .lang files
     }
 
     @Override
@@ -58,10 +56,8 @@ public class DurabilityViewerConfigPanel extends Gui implements ConfigPanel
         return SPACING * (ColouredConfigLines.size() + GuiButtons.size());
     }
 
-
-    //TODO: add option to change DurSize
     @Override
-    public void onPanelShown(ConfigPanelHost host)
+    public void onPanelShown(ConfigPanelHost host) //TODO: add support for .lang files
     {
         mod = host.getMod();
 
@@ -105,6 +101,7 @@ public class DurabilityViewerConfigPanel extends Gui implements ConfigPanel
                 LiteModDurabilityViewer.instance.ArmourStaticColour,
                 LiteModDurabilityViewer.instance.RADur));
 
+        //noinspection UnusedAssignment
         GuiButtons.add(ArmourDurbarBox = new GuiCheckbox(id++, RANK_TWO, SPACING * line++, "Draw the vanilla durabilitybar on top of the armour pieces on armourhud"));
 
         GuiButtons.addAll(ColouredConfigLines);

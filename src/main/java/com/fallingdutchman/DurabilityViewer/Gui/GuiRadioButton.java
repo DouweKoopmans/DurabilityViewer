@@ -8,7 +8,7 @@ import static org.lwjgl.opengl.GL11.glColor4f;
 
 public class GuiRadioButton extends GuiButton
 {
-    public static final ResourceLocation RADIOBUTTON = new ResourceLocation("durabilityviewer", "textures/gui/test.png"); //TODO: create a proper image to use.
+    private static final ResourceLocation RADIOBUTTON = new ResourceLocation("durabilityviewer", "textures/gui/RadioBox.png");
     public boolean checked;
 
     public GuiRadioButton(int control, int xPos, int yPos, String DisplayString)

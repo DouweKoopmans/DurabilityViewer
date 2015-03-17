@@ -25,10 +25,10 @@ public class DvUtils
     {
         tes.startDrawingQuads();
         tes.setColorOpaque_I(arg6);
-        tes.addVertex((double)(x+0), (double)(y+0), 0.0D);
-        tes.addVertex((double)(x+0), (double)(y + height), 0.0D);
+        tes.addVertex((double)(x), (double)(y), 0.0D);
+        tes.addVertex((double)(x), (double)(y + height), 0.0D);
         tes.addVertex((double)(x + width), (double)(y + height), 0.0D);
-        tes.addVertex((double)(x + width), (double)(y+0), 0.0D);
+        tes.addVertex((double)(x + width), (double)(y), 0.0D);
         tes.draw();
     }
 

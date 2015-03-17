@@ -25,7 +25,7 @@ public class GuiControl extends GuiButton {
         Handled,
 
         /** The control handled the keypress and the container should call actionPerformed. */
-        ActionPerformed;
+        ActionPerformed
     }
 
     public enum DialogResult {

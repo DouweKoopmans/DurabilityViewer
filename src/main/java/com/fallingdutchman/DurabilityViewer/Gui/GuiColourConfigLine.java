@@ -3,35 +3,28 @@ package com.fallingdutchman.DurabilityViewer.Gui;
 import com.fallingdutchman.DurabilityViewer.Gui.ColourPicker.GuiColouredButton;
 import com.mumfrey.liteloader.client.gui.GuiCheckbox;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 
-public class GuiColourConfigLine
+class GuiColourConfigLine
 {
     private GuiCheckbox Checkbox;
     private GuiColouredButton ColouredButton;
     private Minecraft mc;
-    private FontRenderer fr;
     private boolean checked;
-    int x, y, height;
-    String DisplayString;
 
+    @SuppressWarnings("UnusedAssignment")
     public GuiColourConfigLine(Minecraft mc, int Id, int xPos, int yPos, String DisplayString, int Colour, boolean checked, boolean enabled)
     {
         this.mc = mc;
-        this.fr = this.mc.fontRenderer;
         this.checked = checked;
         int BOX_WIDTH = 18;
-        this.x = xPos;
-        this.y = yPos;
-        this.height = 12;
+        int height = 12;
         int width = 24;
-        this.DisplayString = DisplayString;
 
         Checkbox = new GuiCheckbox(Id++, xPos, yPos, null);
         Checkbox.checked = checked && enabled;
         Checkbox.enabled = enabled;
 
-        ColouredButton = new GuiColouredButton(mc,Id++, xPos + BOX_WIDTH, yPos, width, this.height, Colour ,DisplayString);
+        ColouredButton = new GuiColouredButton(mc,Id++, xPos + BOX_WIDTH, yPos, width, height, Colour ,DisplayString);
         ColouredButton.enabled = Checkbox.checked && Checkbox.enabled;
     }
 

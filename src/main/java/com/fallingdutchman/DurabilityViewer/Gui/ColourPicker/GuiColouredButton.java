@@ -67,7 +67,7 @@ public class GuiColouredButton extends GuiControl
         }
     }
 
-    public void closePicker(boolean getColour)
+    void closePicker(boolean getColour)
     {
         if (getColour)
         {
@@ -116,6 +116,6 @@ public class GuiColouredButton extends GuiControl
 
     public boolean keyTyped(char keyChar, int keyCode)
     {
-        return (this.picker != null) ? this.picker.textBoxKeyTyped(keyChar, keyCode) : false;
+        return (this.picker != null) && this.picker.textBoxKeyTyped(keyChar, keyCode);
     }
 }
