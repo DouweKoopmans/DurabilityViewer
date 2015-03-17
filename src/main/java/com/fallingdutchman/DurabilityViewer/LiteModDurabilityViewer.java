@@ -174,11 +174,9 @@ public class LiteModDurabilityViewer implements LiteMod, Configurable, HUDRender
     {
         ArmourSlotsHandler AR = new ArmourSlotsHandler(mc.thePlayer.inventory.armorInventory, this.mc, instance.RADurBar);
 
-        if (this.mc.inGameHasFocus || mc.currentScreen == null || mc.currentScreen instanceof GuiChat && !mc.gameSettings.showDebugInfo && instance.RADur)
+        if ((this.mc.inGameHasFocus || mc.currentScreen == null || mc.currentScreen instanceof GuiChat) && instance.RADur)
         {
-            GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
             AR.Render(screenWidth, this.ArmourRh);
-            GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
         }
     }
 

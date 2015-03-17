@@ -5,6 +5,7 @@ import com.fallingdutchman.DurabilityViewer.Handlers.GuiRadioHandler;
 import com.fallingdutchman.DurabilityViewer.LiteModDurabilityViewer;
 
 import com.fallingdutchman.DurabilityViewer.Utils.ColourUtils;
+import com.fallingdutchman.DurabilityViewer.Utils.DvUtils;
 import com.fallingdutchman.DurabilityViewer.Utils.references;
 import com.mumfrey.liteloader.client.gui.GuiCheckbox;
 import com.mumfrey.liteloader.modconfig.ConfigPanel;

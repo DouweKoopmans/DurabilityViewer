@@ -28,9 +28,7 @@ public class DurabilityRenderer
     //main render methodes
     public void RenderDura(FontRenderer Fr, ItemStack Item, int x, int y)
     {
-        int Durability = Item.getMaxDamage() - Item.getItemDamage() + 1;
-        String ItemDurability = Integer.toString(Durability);
-        int Stringwidth = Fr.getStringWidth(ItemDurability);
+        int Stringwidth = Fr.getStringWidth(DurText(Item));
 
         GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glDisable(GL11.GL_DEPTH_TEST);
@@ -95,7 +93,7 @@ public class DurabilityRenderer
             //checks if aInventory is an arrow
             if (item != null && item.getItem().equals(Item.getItemById(262)))
             {
-                arrowcount = item.stackSize;
+                arrowcount += item.stackSize;
             }
         }
         return Integer.toString(arrowcount);
