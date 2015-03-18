@@ -51,6 +51,7 @@ processResources
         }
 jar {
     extension "litemod"
+    appendix project.minecraft.version
 }
 
 reobf {
