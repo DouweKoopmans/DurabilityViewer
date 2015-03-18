@@ -4,7 +4,7 @@
   "mcversion": "${mcversion}",
   "revision": "${revision}",
   "author": "FallingDutchman",
-  "description": "simple hello world, so yh... Hello World!",
+  "description": "adds the ability to display the raw durability of an item into the GUI instead (or in addition to) the vanilla durabilitybar and the ability to draw the current durability of your armour onto the HUD",
   "classTransformerClasses" : [
     "com.fallingdutchman.DurabilityViewer.Transformer.DurabilityViewerTransformer"
     ]
