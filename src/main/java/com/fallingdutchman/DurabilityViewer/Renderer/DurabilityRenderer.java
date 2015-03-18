@@ -5,10 +5,10 @@ import com.fallingdutchman.DurabilityViewer.Utils.ColourUtils;
 import com.fallingdutchman.DurabilityViewer.Utils.DvUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import org.lwjgl.opengl.GL11;
 
 public class DurabilityRenderer
 {
@@ -30,55 +30,54 @@ public class DurabilityRenderer
     {
         int Stringwidth = Fr.getStringWidth(DurText(Item));
 
-        GL11.glDisable(GL11.GL_LIGHTING);
-        GL11.glDisable(GL11.GL_DEPTH_TEST);
-        GL11.glScalef(
+        GlStateManager.disableLighting();
+        GlStateManager.disableDepth();
+        GlStateManager.scale(
                 (SmallFont() ? 0.5F : 1F),
                 (SmallFont() ? 0.5F : 1F),
                 (SmallFont() ? 0.5F : 1F));
         Fr.drawStringWithShadow(DurText(Item),
                 SmallFont() ? ((x + 8) * 2 + 1 + Stringwidth / 2 - Stringwidth) : x + 8 - Stringwidth / 2,
                 ((SmallFont() ? (y + 11) * 2 : y + 9)), ColourUtils.DurColour(Item, DurColour, Static));
-        GL11.glScalef(
+        GlStateManager.scale(
                 (SmallFont() ? 2.0F : 1F),
                 (SmallFont() ? 2.0F : 1F),
                 (SmallFont() ? 2.0F : 1F));
-        GL11.glEnable(GL11.GL_LIGHTING);
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
+        GlStateManager.enableLighting();
+        GlStateManager.enableDepth();
     }
 
     public void RenderArrowCount(FontRenderer Fr, int x, int y, int[] arrowColour)
     {
-        GL11.glDisable(GL11.GL_LIGHTING);
-        GL11.glDisable(GL11.GL_DEPTH_TEST);
-        GL11.glScalef(0.5F, 0.5F, 0.5F);
+        GlStateManager.disableLighting();
+        GlStateManager.disableDepth();
+        GlStateManager.scale(0.5F, 0.5F, 0.5F);
         Fr.drawStringWithShadow(ArrowCount(), x * 2, y * 2, ColourUtils.RGBConverter(arrowColour).getRGB());
-        GL11.glScalef(2F, 2F, 2F);
-        GL11.glEnable(GL11.GL_LIGHTING);
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
+        GlStateManager.scale(2F, 2F, 2F);
+        GlStateManager.enableLighting();
+        GlStateManager.enableDepth();
     }
 
     public void RenderDuraBar(ItemStack Item, int x, int y)
     {
         int var12 = (int)Math.round(13.0D - (double)Item.getItemDamage() * 13.0D / (double)Item.getMaxDamage());
         int var8 = (int)Math.round(255.0D - (double)Item.getItemDamage() * 255.0D / (double)Item.getMaxDamage());
-        GL11.glDisable(GL11.GL_LIGHTING);
-        GL11.glDisable(GL11.GL_DEPTH_TEST);
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
-        GL11.glDisable(GL11.GL_ALPHA_TEST);
-        GL11.glDisable(GL11.GL_BLEND);
+        GlStateManager.disableLighting();
+        GlStateManager.disableDepth();
+        GlStateManager.disableTexture2D();
+        GlStateManager.disableAlpha();
+        GlStateManager.disableBlend();
         Tessellator tes = Tessellator.getInstance();
         int var10 = 255 - var8 << 16 | var8 << 8;
         int var11 = (255 - var8) / 4 << 16 | 16128;
         DvUtils.renderQuad(tes, x + 2, y + (LiteModDurabilityViewer.instance.RDurString ? 15 : 13), 13, (LiteModDurabilityViewer.instance.RDurString ? 1.5f : 1.0f), 0);
         DvUtils.renderQuad(tes, x + 2, y + (LiteModDurabilityViewer.instance.RDurString ? 15 : 13), 12, 1, var11);
         DvUtils.renderQuad(tes, x + 2, y + (LiteModDurabilityViewer.instance.RDurString ? 15 : 13), var12, 1, var10);
-        GL11.glEnable(GL11.GL_LIGHTING);
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
-        GL11.glEnable(GL11.GL_ALPHA_TEST);
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        GlStateManager.enableBlend();
+        GlStateManager.enableAlpha();
+        GlStateManager.enableTexture2D();
+        GlStateManager.enableLighting();
+        GlStateManager.enableDepth();
     }
 
     //helper methodes

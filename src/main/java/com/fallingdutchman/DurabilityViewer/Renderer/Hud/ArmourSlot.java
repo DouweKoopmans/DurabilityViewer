@@ -4,6 +4,7 @@ import com.fallingdutchman.DurabilityViewer.Handlers.RenderHandler;
 import com.fallingdutchman.DurabilityViewer.LiteModDurabilityViewer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
@@ -22,8 +23,9 @@ public class ArmourSlot
     public void Render(int xPos,int yPos, RenderHandler armourRh, boolean RenderBar)
     {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glEnable(32826);
-        RenderHelper.disableStandardItemLighting();
+        GlStateManager.enableRescaleNormal();
+        GlStateManager.enableBlend();
+        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
         RenderHelper.enableGUIStandardItemLighting();
 
         LiteModDurabilityViewer.itemRenderer.renderItemAndEffectIntoGUI(this.Item, xPos, yPos);
@@ -34,8 +36,9 @@ public class ArmourSlot
             armourRh.RenderDuraBar(this.Item, xPos, yPos);
         }
 
-        GL11.glDisable(32826);
-        GL11.glDisable(GL11.GL_BLEND);
+        RenderHelper.disableStandardItemLighting();
+        GlStateManager.disableRescaleNormal();
+        GlStateManager.disableBlend();
         GL11.glColor4f(1.0F,1.0F,1.0F,1.0F);
     }
 }

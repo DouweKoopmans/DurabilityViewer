@@ -22,13 +22,10 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderItem;
-import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.client.resources.model.ModelManager;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import net.minecraft.util.EnumChatFormatting;
-import org.lwjgl.opengl.GL11;
 
 import java.io.File;
 
@@ -147,18 +144,20 @@ public class LiteModDurabilityViewer implements LiteMod, Configurable, HUDRender
             {
                 String var6 = Text == null ? String.valueOf(stack.stackSize) : Text;
 
-            if (Text == null && stack.stackSize < 1)
-            {
-                var6 = EnumChatFormatting.RED + String.valueOf(stack.stackSize);
-            }
+                if (Text == null && stack.stackSize < 1)
+                {
+                    var6 = EnumChatFormatting.RED + String.valueOf(stack.stackSize);
+                }
 
-            GlStateManager.disableLighting();
-            GlStateManager.disableDepth();
-            GlStateManager.disableBlend();
-            fontRenderer.drawStringWithShadow(var6, (float)(xPos + 19 - 2 - fontRenderer.getStringWidth(var6)), (float)(yPos + 6 + 3), 16777215);
-            GlStateManager.enableLighting();
-            GlStateManager.enableDepth();
-        } else if (stack.isItemDamaged())
+                GlStateManager.disableLighting();
+                GlStateManager.disableDepth();
+                GlStateManager.disableBlend();
+                fontRenderer.drawStringWithShadow(var6, (float)(xPos + 19 - 2 - fontRenderer.getStringWidth(var6)), (float)(yPos + 6 + 3), 16777215);
+                GlStateManager.enableLighting();
+                GlStateManager.enableDepth();
+                GlStateManager.enableBlend();
+
+            } else if (stack.isItemDamaged())
             {
                 //draw string
                 if (instance.RDurString)

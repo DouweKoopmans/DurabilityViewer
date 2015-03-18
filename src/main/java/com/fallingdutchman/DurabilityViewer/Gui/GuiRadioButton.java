@@ -2,9 +2,8 @@ package com.fallingdutchman.DurabilityViewer.Gui;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
-
-import static org.lwjgl.opengl.GL11.glColor4f;
 
 public class GuiRadioButton extends GuiButton
 {
@@ -22,7 +21,7 @@ public class GuiRadioButton extends GuiButton
         if (this.visible)
         {
             minecraft.getTextureManager().bindTexture(RADIOBUTTON);
-            glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+            GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
             this.hovered = mouseX >= this.xPosition && mouseY >= this.yPosition && mouseX < this.xPosition + this.width && mouseY < this.yPosition + this.height;
             this.drawTexturedModalRect(this.xPosition, this.yPosition, this.checked ? 16 : 0, 0, 32, 16);
             this.mouseDragged(minecraft, mouseX, mouseY);
