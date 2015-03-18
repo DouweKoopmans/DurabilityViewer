@@ -42,3 +42,6 @@ processResources
                 exclude 'litemod.json'
             }
         }
+jar {
+    appendix project.minecraft.version
+}
