@@ -20,6 +20,7 @@ import com.mumfrey.liteloader.transformers.event.EventInfo;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiChat;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.item.Item;
@@ -95,6 +96,16 @@ public class LiteModDurabilityViewer implements LiteMod, Configurable, HUDRender
     @SerializedName("Arrow_Count_Colour")
     public int[] ArrowColour = new int[3];
 
+    /** where to display the armour status HUD
+     *
+     * possibilities:
+     * 0: top of the screen
+     * 1: right of the durability bar
+     * 2: left of the durability bar
+     */
+    @Expose
+    @SerializedName("Armour_HUD_location")
+    public int ArmourLoc = 0;
 
     //actual class methods
     public static LiteModDurabilityViewer instance;
@@ -182,10 +193,11 @@ public class LiteModDurabilityViewer implements LiteMod, Configurable, HUDRender
     public void onPostRenderHUD(int screenWidth, int screenHeight)
     {
         ArmourSlotsHandler AR = new ArmourSlotsHandler(mc.thePlayer.inventory.armorInventory, this.mc, instance.RADurBar);
+        ScaledResolution sc = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
 
         if ((this.mc.inGameHasFocus || mc.currentScreen == null || mc.currentScreen instanceof GuiChat) && instance.RADur)
         {
-            AR.Render(screenWidth, this.ArmourRh);
+            AR.Render(sc.getScaledWidth(), sc.getScaledHeight(), this.ArmourRh);
         }
     }
 
