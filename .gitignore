@@ -18,7 +18,6 @@ DurabilityViewerMod.iml
 build
 .gradle
 gradle
-gradle.properties
 gradlew
 gradlew.bat
 

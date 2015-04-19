@@ -18,9 +18,7 @@ buildscript {
 
 apply plugin: 'forge'
 
-archivesBaseName = "DurabilityViewer"
-version = project.version
-ext.rev = "1"
+project.version += "." + --project.revision
 
 minecraft {
     version = "1.8-recommended"
