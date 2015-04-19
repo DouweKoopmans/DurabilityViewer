@@ -73,11 +73,11 @@ public class DurabilityViewerConfigPanel extends Gui implements ConfigPanel
 
         String[] ContDurModeStrings = {"Normal number", "Percentual value"};
         ContDurModeRadioController = new GuiRadioHandler(this.mc, this.fr, ContDurModeStrings ,id++, RANK_TWO, line++, "Display the current durability as a", LiteModDurabilityViewer.instance.DurMode[0], LiteModDurabilityViewer.instance.RDurString);
-        line = line + ContDurModeStrings.length;
+        line += ContDurModeStrings.length;
 
         String[] DurSizeStrings = {"Display a small font", "Display a large font (disables durability bar)"};
         DurSizeRadioController = new GuiRadioHandler(this.mc, this.fr, DurSizeStrings,id++, RANK_TWO, line++, "Size of the displayed font", LiteModDurabilityViewer.instance.DurSize, LiteModDurabilityViewer.instance.RDurString);
-        line = line + DurSizeStrings.length;
+        line += DurSizeStrings.length;
 
         ColouredConfigLines.add(ContStaticColour = new GuiColourConfigLine(this.mc, id++, RANK_TWO, SPACING * line++, "Use static colour",
                 ColourUtils.RGBConverter(LiteModDurabilityViewer.instance.ContDurColour).getRGB(),
@@ -94,11 +94,11 @@ public class DurabilityViewerConfigPanel extends Gui implements ConfigPanel
 
         String[] ArmourDurModeStrings = {"Normal number", "Percentual value"};
         ArmourDurModeRadioController = new GuiRadioHandler(this.mc, this.fr, ArmourDurModeStrings, id++, RANK_TWO, line++, "Display current armour durability as a", LiteModDurabilityViewer.instance.DurMode[1], LiteModDurabilityViewer.instance.RADur);
-        line = line + ArmourDurModeStrings.length;
+        line += ArmourDurModeStrings.length;
 
         String[] ArmourLocModes = {"top center", "right of the hotbar", "left of the hotbar"};
         ArmourLocRadioControler = new GuiRadioHandler(this.mc, this.fr, ArmourLocModes, id++, RANK_TWO, line++, "Where to draw the armour HUD", LiteModDurabilityViewer.instance.ArmourLoc, LiteModDurabilityViewer.instance.RADur);
-        line = line + ArmourLocModes.length;
+        line += ArmourLocModes.length;
 
         ColouredConfigLines.add(ArmourStaticColour = new GuiColourConfigLine(this.mc, id++, RANK_TWO, SPACING * line++, "Use a static colour",
                 ColourUtils.RGBConverter(LiteModDurabilityViewer.instance.ArmourDurColour).getRGB(),
