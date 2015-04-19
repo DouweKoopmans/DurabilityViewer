@@ -43,5 +43,6 @@ processResources
             }
         }
 jar {
+    project.version += "." + --project.revision
     appendix project.minecraft.version
 }
