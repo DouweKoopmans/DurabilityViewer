@@ -1,6 +1,8 @@
 package com.fallingdutchman.DurabilityViewer.Handlers;
 
+import com.fallingdutchman.DurabilityViewer.LiteModDurabilityViewer;
 import com.fallingdutchman.DurabilityViewer.Renderer.Hud.ArmourSlot;
+import com.mumfrey.liteloader.LiteMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.entity.boss.BossStatus;
@@ -31,12 +33,13 @@ public class ArmourSlotsHandler
         this.RenderBar = RenderBar;
     }
 
-    public void Render(int width, RenderHandler armourRh)
+    public void Render(int width,int height, RenderHandler armourRh)
     {
+        LiteModDurabilityViewer.itemRenderer.zLevel = 200.0F;
         for (int i = 0; i < ArmourSlots.size(); i++)
         {
             GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-            ArmourSlots.get(i).Render(xPos(width,i), yPos(), armourRh, RenderBar);
+            ArmourSlots.get(i).Render(xPos(width,i), yPos(height), armourRh, RenderBar);
             GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
         }
     }
@@ -44,13 +47,46 @@ public class ArmourSlotsHandler
     private int xPos(int width, int Iteration)
     {
         final int OFFSET = 16;
-        int WidthOffset = width / 2 + (ArmourSlots.size() * OFFSET) / 2;
+        final int HOTBAR_OFFSET = 144;
+        int WidthOffset;
+        if (LiteModDurabilityViewer.instance.ArmourLoc == 0)
+        {
+            WidthOffset = width / 2 + (ArmourSlots.size() * OFFSET) / 2;
+        }
+        else if (LiteModDurabilityViewer.instance.ArmourLoc == 1)
+        {
+            WidthOffset = width / 2 + HOTBAR_OFFSET + (ArmourSlots.size() * OFFSET) /2;
+        }
+        else if (LiteModDurabilityViewer.instance.ArmourLoc == 2)
+        {
+            WidthOffset = width / 2 - HOTBAR_OFFSET + (ArmourSlots.size() * OFFSET) /2;
+        }
+        else
+        {
+            WidthOffset = width / 2 + (ArmourSlots.size() * OFFSET) / 2;
+        }
+
         return WidthOffset - OFFSET * ++Iteration;
     }
 
-    private int yPos()
+    private int yPos(int height)
     {
-        if (BossStatus.bossName != null && BossStatus.statusBarTime > 0) return 22;
-        else return 2;
+        if (LiteModDurabilityViewer.instance.ArmourLoc == 0)
+        {
+            if (BossStatus.bossName != null && BossStatus.statusBarTime > 0)    return 22;
+            else                                                                return 2;
+        }
+        else if (LiteModDurabilityViewer.instance.ArmourLoc == 1 || LiteModDurabilityViewer.instance.ArmourLoc == 2)
+        {
+            return height - 20;
+        }
+        else
+        {
+            //this should never be the case, but users always manage to break things.
+            LiteModDurabilityViewer.instance.ArmourLoc = 0;
+
+            if (BossStatus.bossName != null && BossStatus.statusBarTime > 0)    return 22;
+            else                                                                return 2;
+        }
     }
 }

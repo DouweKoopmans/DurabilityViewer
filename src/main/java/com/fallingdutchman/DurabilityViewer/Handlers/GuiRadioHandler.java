@@ -77,11 +77,7 @@ public class GuiRadioHandler
 
     public int getSettings()
     {
-        if (Settings == 0 || Settings == 1) return Settings;
-        else
-        {
-            return 0;
-        }
+        return Settings;
     }
 
     public ArrayList<GuiRadioButton> getButtons()
