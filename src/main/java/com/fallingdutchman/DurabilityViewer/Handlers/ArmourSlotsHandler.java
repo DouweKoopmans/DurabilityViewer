@@ -2,7 +2,6 @@ package com.fallingdutchman.DurabilityViewer.Handlers;
 
 import com.fallingdutchman.DurabilityViewer.LiteModDurabilityViewer;
 import com.fallingdutchman.DurabilityViewer.Renderer.Hud.ArmourSlot;
-import com.mumfrey.liteloader.LiteMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.entity.boss.BossStatus;
@@ -35,7 +34,6 @@ public class ArmourSlotsHandler
 
     public void Render(int width,int height, RenderHandler armourRh)
     {
-        LiteModDurabilityViewer.itemRenderer.zLevel = 200.0F;
         for (int i = 0; i < ArmourSlots.size(); i++)
         {
             GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
