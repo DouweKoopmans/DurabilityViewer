@@ -18,7 +18,7 @@ buildscript {
 
 apply plugin: 'liteloader'
 
-archivesBaseName = "DurabilityViewer"
+project.version += "." + --project.revision
 
 minecraft {
     version = "1.7.10"
@@ -43,6 +43,5 @@ processResources
             }
         }
 jar {
-    project.version += "." + --project.revision
     appendix project.minecraft.version
 }
