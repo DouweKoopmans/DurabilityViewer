@@ -24,3 +24,5 @@ gradlew.bat
 ## Ant
 ant
 debug
+build.number
+run/

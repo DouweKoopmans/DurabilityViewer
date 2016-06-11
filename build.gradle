@@ -1,35 +1,33 @@
 buildscript {
     repositories {
-        mavenCentral()
+        jcenter()
         maven {
-            name = "forge"
-            url = "http://files.minecraftforge.net/maven"
-        }
-        maven {
-            name = "sonatype"
-            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+            name 'forge'
+            url 'http://files.minecraftforge.net/maven/'
         }
     }
     dependencies {
-        // uncomment this if your not symlinking
-        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
     }
 }
+apply plugin: 'net.minecraftforge.gradle.liteloader'
 
-apply plugin: 'forge'
-
-project.version += "." + --project.revision
-
-minecraft {
-    version = "1.8-recommended"
-    runDir = "eclipse/assets"
-    replace "@VERSION@", project.version
-    mappings = "stable_15"
-    assetDir = "/src/main/resources/assets"
+group = "com.fallingdutchman.DurabilityViewer"
+project.version += "." + project.revision
+description = "adds the ability to display the raw durability of an item into the GUI instead (or in addition to) the vanilla durabilitybar and the ability to draw the current durability of your armour onto the HUD"
+ext {
+    revision = project.revision
+    author = 'FallingDutchman'
 }
 
-processResources
-        {
+minecraft {
+    version = "1.8.9"
+    mappings = "stable_22"
+    replace "@VERSION@", project.version
+    runDir = 'run'
+}
+
+processResources {
             inputs.property "version", project.version
             inputs.property "mcversion", project.minecraft.version
             inputs.property "revision", project.revision
@@ -46,12 +44,14 @@ processResources
             from(sourceSets.main.resources.srcDirs) {
                 exclude 'litemod.json'
             }
-        }
-jar {
-    extension "litemod"
-    appendix project.minecraft.version
 }
 
-reobf {
-    setSrgMcp()
+litemod.json {
+    revision = project.revision
+    author = project.author
+}
+
+jar {
+    dependsOn litemod
+    from litemod.output
 }

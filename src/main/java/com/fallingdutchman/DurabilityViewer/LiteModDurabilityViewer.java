@@ -193,9 +193,11 @@ public class LiteModDurabilityViewer implements LiteMod, Configurable, HUDRender
     public void onPostRenderHUD(int screenWidth, int screenHeight)
     {
         ArmourSlotsHandler AR = new ArmourSlotsHandler(mc.thePlayer.inventory.armorInventory, this.mc, instance.RADurBar);
-        ScaledResolution sc = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
+        ScaledResolution sc = new ScaledResolution(mc);
 
-        if ((this.mc.inGameHasFocus || mc.currentScreen == null || mc.currentScreen instanceof GuiChat) && instance.RADur && !(instance.ArmourLoc == 0 && this.mc.gameSettings.keyBindPlayerList.isKeyDown() && this.mc.thePlayer.sendQueue.func_175106_d().size() > 1))
+        if ((this.mc.inGameHasFocus || mc.currentScreen == null || mc.currentScreen instanceof GuiChat)
+                && instance.RADur && !(instance.ArmourLoc == 0 && this.mc.gameSettings.keyBindPlayerList.isKeyDown()
+                && this.mc.thePlayer.sendQueue.getPlayerInfoMap().size() > 1))
         {
             AR.Render(sc.getScaledWidth(), sc.getScaledHeight(), this.ArmourRh);
         }

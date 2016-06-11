@@ -52,7 +52,7 @@ public class DurabilityRenderer
         GlStateManager.disableLighting();
         GlStateManager.disableDepth();
         GlStateManager.scale(0.5F, 0.5F, 0.5F);
-        Fr.drawStringWithShadow(ArrowCount(), x * 2, y * 2, ColourUtils.RGBConverter(arrowColour).getRGB());
+        Fr.drawStringWithShadow(arrowCount(), x * 2, y * 2, ColourUtils.RGBConverter(arrowColour).getRGB());
         GlStateManager.scale(2F, 2F, 2F);
         GlStateManager.enableLighting();
         GlStateManager.enableDepth();
@@ -60,19 +60,20 @@ public class DurabilityRenderer
 
     public void RenderDuraBar(ItemStack Item, int x, int y)
     {
-        int var12 = (int)Math.round(13.0D - (double)Item.getItemDamage() * 13.0D / (double)Item.getMaxDamage());
-        int var8 = (int)Math.round(255.0D - (double)Item.getItemDamage() * 255.0D / (double)Item.getMaxDamage());
+        int filledDuraBarWidth = (int)Math.round(13.0D - (double)Item.getItemDamage() * 13.0D / (double)Item.getMaxDamage());
+        int durabilityColour = (int)Math.round(255.0D - (double)Item.getItemDamage() * 255.0D / (double)Item.getMaxDamage());
         GlStateManager.disableLighting();
         GlStateManager.disableDepth();
         GlStateManager.disableTexture2D();
         GlStateManager.disableAlpha();
         GlStateManager.disableBlend();
         Tessellator tes = Tessellator.getInstance();
-        int var10 = 255 - var8 << 16 | var8 << 8;
-        int var11 = (255 - var8) / 4 << 16 | 16128;
-        DvUtils.renderQuad(tes, x + 2, y + (LiteModDurabilityViewer.instance.RDurString ? 15 : 13), 13, (LiteModDurabilityViewer.instance.RDurString ? 1.5f : 1.0f), 0);
-        DvUtils.renderQuad(tes, x + 2, y + (LiteModDurabilityViewer.instance.RDurString ? 15 : 13), 12, 1, var11);
-        DvUtils.renderQuad(tes, x + 2, y + (LiteModDurabilityViewer.instance.RDurString ? 15 : 13), var12, 1, var10);
+        DvUtils.draw(tes.getWorldRenderer(), x + 2, y + (LiteModDurabilityViewer.instance.RDurString ? 15 : 13), 13,
+                (LiteModDurabilityViewer.instance.RDurString ? 1.5f : 1.0f), 0, 0, 0, 255);
+        DvUtils.draw(tes.getWorldRenderer(), x + 2, y + (LiteModDurabilityViewer.instance.RDurString ? 15 : 13), 12, 1,
+                (255 - durabilityColour) / 4, 64, 0, 255);
+        DvUtils.draw(tes.getWorldRenderer(), x + 2, y + (LiteModDurabilityViewer.instance.RDurString ? 15 : 13), filledDuraBarWidth,
+                1, 255 - durabilityColour, durabilityColour, 0, 255);
         GlStateManager.enableBlend();
         GlStateManager.enableAlpha();
         GlStateManager.enableTexture2D();
@@ -80,11 +81,10 @@ public class DurabilityRenderer
         GlStateManager.enableDepth();
     }
 
-    //helper methodes
-
-    private String ArrowCount()
+    //helper method's
+    private String arrowCount()
     {
-        int arrowcount = 0;
+        int arrowCount = 0;
         ItemStack[] Inventory = Minecraft.getMinecraft().thePlayer.inventory.mainInventory;
 
         for (ItemStack item : Inventory)
@@ -92,10 +92,10 @@ public class DurabilityRenderer
             //checks if aInventory is an arrow
             if (item != null && item.getItem().equals(Item.getItemById(262)))
             {
-                arrowcount += item.stackSize;
+                arrowCount += item.stackSize;
             }
         }
-        return Integer.toString(arrowcount);
+        return Integer.toString(arrowCount);
     }
 
     private String DurText(ItemStack item)

@@ -2,9 +2,11 @@ package com.fallingdutchman.DurabilityViewer.Utils;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 public class DvUtils
@@ -21,15 +23,14 @@ public class DvUtils
         return Minecraft.getMinecraft().thePlayer.inventory.hasItemStack(item);
     }
 
-    public static void renderQuad(Tessellator tes, int x, int y, int width, float height, int arg6)
+    public static void draw(WorldRenderer renderer, int x, int y, int width, float height, int red, int green, int blue, int alpha)
     {
-        tes.getWorldRenderer().startDrawingQuads();
-        tes.getWorldRenderer().setColorOpaque_I(arg6);
-        tes.getWorldRenderer().addVertex((double) (x), (double) (y), 0.0D);
-        tes.getWorldRenderer().addVertex((double) (x), (double) (y + height), 0.0D);
-        tes.getWorldRenderer().addVertex((double) (x + width), (double) (y + height), 0.0D);
-        tes.getWorldRenderer().addVertex((double)(x + width), (double)(y), 0.0D);
-        tes.draw();
+        renderer.begin(7, DefaultVertexFormats.POSITION_COLOR);
+        renderer.pos((double)(x), (double)(y), 0.0D).color(red, green, blue, alpha).endVertex();
+        renderer.pos((double)(x), (double)(y + height), 0.0D).color(red, green, blue, alpha).endVertex();
+        renderer.pos((double)(x + width), (double)(y + height), 0.0D).color(red, green, blue, alpha).endVertex();
+        renderer.pos((double)(x + width), (double)(y), 0.0D).color(red, green, blue, alpha).endVertex();
+        Tessellator.getInstance().draw();
     }
 
 }

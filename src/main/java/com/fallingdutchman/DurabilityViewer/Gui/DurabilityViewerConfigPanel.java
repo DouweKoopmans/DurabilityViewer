@@ -61,7 +61,7 @@ public class DurabilityViewerConfigPanel extends Gui implements ConfigPanel
     {
         mod = host.getMod();
 
-        ScaledResolution scaledResolution = new ScaledResolution(this.mc, this.mc.displayWidth, this.mc.displayHeight);
+        ScaledResolution scaledResolution = new ScaledResolution(this.mc);
         GuiControl.setScreenSizeAndScale(host.getWidth(), host.getHeight(), scaledResolution.getScaleFactor());
         int id = 0;
         int line = 0;
@@ -124,7 +124,7 @@ public class DurabilityViewerConfigPanel extends Gui implements ConfigPanel
     @Override
     public void onPanelResize(ConfigPanelHost host)
     {
-        ScaledResolution scaledres = new ScaledResolution(this.mc, this.mc.displayWidth, this.mc.displayHeight);
+        ScaledResolution scaledres = new ScaledResolution(this.mc);
         GuiControl.setScreenSizeAndScale(host.getWidth(), host.getHeight(), scaledres.getScaleFactor());
     }
 
